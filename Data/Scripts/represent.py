@@ -93,81 +93,13 @@ def delete_fold(tm, threhold=0.5, tiao=False):
 #return 0
 
 def re():
-	tm = np.loadtxt("../TM_matrix.fa")
+	tm = np.loadtxt("../Datasets/Fold_representation/TM_score/Gram_Matrix/TM_matrix/TM_matrix.fa")
 	#tm = np.loadtxt("../../shaowen/Gram_matrix.fa")
 # 1/11/2019
 	model=eigen()
 	tm = model.center(tm,tm)
 	#tm = tm + np.identity(len(tm))*5.6
 	w,v = model.fit(tm)
-	
-	import matplotlib
-	matplotlib.use('Qt4Agg')
-	import matplotlib.pyplot as plt
-	plt.figure()	
-
-	x=np.arange(0, 1232, 1)
-	for i in range(len(w)):
-		if(i>1000):
-			w[i]=0.
-		print w[i]
-	print np.sum(w[0:20])/np.sum(w[0:100]), np.sum(w[0:20]), np.sum(w)
-
-
-	w100 = np.sum(w[0:20])/np.sum(w[0: 50])
-
-	z1=np.linspace(0, 50)
-	z=np.linspace(0,1)
-	plt.plot(np.zeros(z.shape)+50, z , linestyle='--', color='black')
-	plt.plot(z1, np.zeros(z1.shape)+w100 , linestyle='--', color='black')
-	plt.text(-4, w100, "%.2f" %(w100),  fontsize=14)
-
-	x = np.arange(20, 1200)
-	y = []
-	for i in x:
-		y.append ( np.sum(w[0:20])/np.sum(w[0: i]) )
-
-	plt.plot(x, y)
-	plt.xticks([0,  50, 100, 150, 200, 250, 300, 400, 500, 600],(0, 100, 200, 300, 400, 500, 600, 800, 1000, 1200), fontsize=14)
-	plt.yticks(fontsize=14)
-	plt.ylim([0,1])
-	plt.xlim([20, 300])
-	plt.xlabel("n",  fontsize=14)
-	plt.ylabel("r",  fontsize=14)
-	plt.savefig("feature_re.eps", format='eps')
-	plt.savefig("feature_re.png", format='png')
-	plt.show()
-
-
-
-	'''
-	exit(0)
-
-	w[0:20]+=2
-
-	z1=np.linspace(-100,20)
-
-	z=np.linspace(0,1)
-	plt.plot(np.zeros(z.shape)+20, z , linestyle='--', color='black')
-
-	plt.plot(z1, np.zeros(z1.shape)+np.sum(w[0:20])/np.sum(w), linestyle='--', color='grey')
-#	plt.text(22, np.sum(w[0:20])/np.sum(w), "[%.1f, 20]" %())
-	for i in range(len(x)):
-		plt.scatter(x[i], np.sum(w[0:(i+1)])/np.sum(w), color='blue' , s=4)
-
-	print np.sum(w[0:20])/np.sum(w)
-	#plt.xticks(x, (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20))
-	plt.xlabel("Index", fontsize=12)
-	plt.ylabel("Cumulative explained Variance", fontsize=12)
-	plt.ylim([0,1])
-	plt.xlim([-100,1400])
-	plt.xticks([0,  200, 400, 600, 800, 1000, 1200],(0, 200, 400, 600, 800, 1000, 1200))
-	plt.yticks([0.0, 0.20, 0.4, 0.6, 0.8, 1], (0.0, 0.20,0.4,0.6,0.8,1))
-	plt.savefig("curve.eps", format='eps')
-	plt.show()
-	plt.close()
-	exit(0)
-	'''
 	classs=[]
 	fold=[]
 	top20=[]
@@ -204,7 +136,6 @@ def re():
 #	for i in range(1232):
 #		print ("%.2f %.3f %.3f" % (w[i], w[i]/len(w), np.var(np.array(coor).T[i]) ))
 
-	exit(0)
 
 	np.savetxt("folds_coordinate", top20, fmt='%s')
 
