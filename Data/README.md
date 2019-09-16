@@ -3,7 +3,6 @@
 ## Fold Representation
 ### Operations:
 * **Run "scripts/data_curation.py" to get representaive pdbs for each fold.**
-* **Run "scripts/TM_calculation.py" to get the pairwise TM score matrix.**
 * **Run "scripts/represent.py" to obtain *folds_coordinate* and *folds_basis*.**
 
 ### Result Files:
