@@ -1,5 +1,4 @@
-# gcWGAN
-Guided Conditional Wasserstein GAN for De Novo Protein Design
+# gcWGAN (Guided Conditional Wasserstein GAN for De Novo Protein Design)
 
 **Motivation:** Facing data quickly accumulating on protein sequence and structure, this study is addressingthe following question: to what extent could current data alone reveal deep insights into the sequence-structure relationship, such that new sequences can be designed accordingly for novel structure folds?
 
