@@ -6,8 +6,8 @@
 
 ***
 
-## Model Accuracy:
-Model Accuracy reflects that how likely our model can generate sequences folding into the target folds and how similar the structure prediction of the generated ones can be to the ground truth. We applied to methods eo measure the model accuracy, the **Yield Ratio Analysis** and the **Rosetta Analysis**. **Yield Ratio** reflects the portion of the sequences that pass the oracle, which can reflect the model accuracy. For comparison we also applied the previous state-of-art model, [cVAE](https://github.com/psipred/protein-vae) to calculate the yield ratios. Go to the ***Accuracy/Yield_Ratio_Analysis*** folder for more details. [Rosetta](https://www.rosettacommons.org/home) is a software that can can be applied for sequence structure prediction. Based on gcWGAN we generated 10 sequences that pass the oracle for 6 selected folds and a novel fold, and then did the same based on cVAE. Then we applied the process in the ***Accuracy/Rosetta_Analysis*** folder for comparison. For more details or apply the process, go to the ***Accuracy/Rosetta_Analysis*** folder.
+## Yield Ratio:
+Yield ratio reflects the portion of the sequences that pass the oracle, which can reflect the model accuracy. For comparison we also applied the previous state-of-art model, [cVAE](https://github.com/psipred/protein-vae) to calculate the yield ratios. To calculate the yield ratio, go to the ***Yield_Ratio_Analysis*** folder and follow the instructions.
 
 ***
 
