@@ -7,7 +7,7 @@
 ***
 
 ## Model Accuracy:
-Model Accuracy reflects that how likely our model can generate sequences folding into the target folds and how similar the structure prediction of the generated ones can be to the ground truth. For model accuracy measurement we calculted the yield ratio, the portion of the sequences that pass the oracle, and applied [Rosetta](https://www.rosettacommons.org/home) to predict the strcuture of our generated sequences so that we can compare the predictions with the ground truth. Go to folder ***Accuracy** for more details and the scripts we applied for yield ratio analysis.
+Model Accuracy reflects that how likely our model can generate sequences folding into the target folds and how similar the structure prediction of the generated ones can be to the ground truth. For model accuracy measurement we calculted the yield ratio, the portion of the sequences that pass the oracle, and applied [Rosetta](https://www.rosettacommons.org/home) to predict the strcuture of our generated sequences so that we can compare the predictions with the ground truth. Go to folder ***Accuracy*** for more details and the scripts we applied for yield ratio analysis.
 
 ***
 
