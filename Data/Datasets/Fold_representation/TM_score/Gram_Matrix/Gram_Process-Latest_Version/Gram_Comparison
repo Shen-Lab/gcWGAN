@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Oct 24 13:29:55 2018
+
+@author: shaowen1994
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def readfile(path):
+    file = open(path,'r')
+    data = file.readlines()
+    length = len(data)
+    for i in range(length):
+        line = data[i].strip('\n').split('\t')
+        line = [float(x) for x in line]
+        line = np.array([line])
+        if i == 0:
+            result = line
+        else:
+            result = np.r_[result,line]
+    file.close()
+    return result
+
+def matrix_to_file(matrix,path):
+    row_num = matrix.shape[0]
+    m_file = open(path,'w')
+    for i in range(row_num):
+        line = [str(m) for m in matrix[i]]
+        line = '\t'.join(n for n in line)
+        m_file.write(line + '\n')
+    m_file.close()
+# ************** TM_scores Matrix (TM_matrix) ***************
+TM_matrix = readfile("TM_matrix.fa")
+
+
+def DataProcess(TM_matrix,S_process = None, S_D = 0):
+    """
+    S_process = None, no transform
+          n, S + n*lambda*I
+    S_D = 0, sqrt(2*(1 - S))
+          1, S_max - S
+    """
+    N = TM_matrix.shape[0]
+    # ************** Similarity Matrix (S) **********************
+    if S_process == None:
+        S = TM_matrix
+        name_s = '(S = TM_matrix, '
+    else:
+        t_value, t_vector = np.linalg.eig(TM_matrix)
+        t_min = min(t_value)
+        lam = S_process*(int(abs(t_min)) + 1)
+        S = TM_matrix + lam*np.eye(N)
+        S = S/(1+lam)
+        name_s = '(S = TM_matrix + ' +str(S_process) + '*$\lambda$*I, '
+    #s_value, s_vector = np.linalg.eig(S)
+    # ************** Distance Matrix (D) (square) *************
+    if S_D == 1:
+        s_max = max(S.reshape(-1))
+        D = s_max*np.ones([N,N]) - S
+        D = D**2
+        name_d = '$D_{ij} = S_{max} - S_{ij}$)'
+    elif S_D == 0:
+        D = 2*(1-S)
+        name_d = '$D_{ij} = \sqrt{2*(1 - S_{ij})}$)'
+    else:
+        print("No such S-D transformation!")
+        return 0
+    # ************** Gram Matrix (M) **************************
+    D_comp = sum(sum(D))/(2*(N**2))
+    D_0 = []
+    for i in range(N):
+        d_i_0 = -D_comp
+        for j in range(N):
+            d_i_0 += D[i][j]/N
+        D_0.append(d_i_0)
+    D_0 = np.array(D_0)
+
+    for i in range(N):
+        if i == 0:
+           D_minus =  D_0
+        else:
+           D_minus = np.c_[D_minus,D_0]
+      
+    D_minus = D_minus + np.transpose(D_minus)
+    M =  0.5*(D_minus-D)
+    #M = D - D_minus
+    # ************** Eigenvalue Decomposition *****************
+    value, vector = np.linalg.eig(M)
+
+    s_value = sorted(value,reverse = True)
+    #Value = np.c_[value,s_value]
+    #sum_v = 0
+    #sum_value = []
+    #for i in s_value:
+        #sum_v += i
+        #sum_value.append(sum_v)
+
+    #print(s_value[0:20])
+    plt.figure(1)
+    plt.hist(s_value,bins = 200,normed = True)
+    plt.title('Ditribution of Eigenvalues.'+ name_s + name_d)
+    plt.xlabel('Eigenvalue')
+    plt.ylabel('Distribution Density')
+    plt.figure(2)
+    plt.bar(range(1,21),s_value[0:20])
+    plt.xticks(range(1,21))
+    plt.title('Top 20 Eigenvalues.'+ name_s + name_d)
+    plt.xlabel('order')
+    plt.ylabel('Eigenvalues')
