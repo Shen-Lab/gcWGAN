@@ -4,7 +4,7 @@
 
 * **For_Diversity_and_Novelty:** Contain the generated sequences based on cWGAN and gcWGAN that we applied for sequence diversity and novelty analysis.
 * **For_Generating_Ratio_Analysis:** Contain the generated sequences based on cWGAN and gcWGAN that we applied for generating rate analysis.
-* **For_Rosetta_Analysis:** Contain the generated sequences based on gcWGAN that we applied for Rosetta analysis. (For each fold, the 10 sequences are the first 10 sequences in the successful sequence file for sequence diversity and novelty analysis.)
+* **For_Rosetta_Analysis:** Contain the generated sequences based on gcWGAN that we applied for Rosetta analysis. (For the six folds selected from the test set, the 10 sequences are the first 10 sequences in the successful sequence file for sequence diversity and novelty analysis.)
 
 *** 
 
