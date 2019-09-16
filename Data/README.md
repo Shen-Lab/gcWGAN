@@ -32,14 +32,3 @@ Check the folder ***Datasets/Final_representation/verison04/*** .
 ## Final Data
 
 Contain the data we directly applied for the model training, validation and test process.
-
-***
-
-## Data Augmentation:
-
-**Link:** https://drive.google.com/open?id=1icWlx31gcA_61bXuogssn7SfbROaGxea
-
-* **Augment data by deleting the beginning and the end of the sequence based on its secondary structure.**
-* **Augment b into d and n, z into q and e.**
-* **Replace x with a.**
-* **Delete those seqs including X or having more than two x.**
