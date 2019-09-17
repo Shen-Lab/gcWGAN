@@ -1,9 +1,9 @@
 # gcWGAN 
 **Guided Conditional Wasserstein GAN for De Novo Protein Design**
 
-**Motivation:** Facing data quickly accumulating on protein sequence and structure, this study is addressingthe following question: to what extent could current data alone reveal deep insights into the sequence-structure relationship, such that new sequences can be designed accordingly for novel structure folds?
+**Motivation:** Facing data quickly accumulating on protein sequence and structure, this study is addressing the following question: to what extent could current data alone reveal deep insights into the sequence-structure relationship, such that new sequences can be designed accordingly for novel structure folds?
 
-**Results:** We have developed novel deep generative models,  constructed low-dimensional andgeneralizable representation of fold space, exploited sequence data with and without paired structures,and developed ultra-fast fold predictor as an oracle providing feedback. The resulting semi-supervisedgcWGAN is assessed with the oracle over 100 novel folds not in the training set and found to generatemore yields and cover 3.6 times more target folds compared to a competing data-driven method (cVAE). Assessed with structure predictor over representative novel folds (including one not even part of basisfolds), gcWGAN designs are found to have comparable or better fold accuracy yet much more sequencediversity and novelty than cVAE. gcWGAN explores uncharted sequence space to design proteins bylearning from current sequence-structure data. The ultra fast data-driven model can be a powerful additionto principle-driven design methods through generating seed designs or tailoring sequence space.
+**Results:** We have developed novel deep generative models,  constructed low-dimensional andgeneralizable representation of fold space, exploited sequence data with and without paired structures,and developed ultra-fast fold predictor as an oracle providing feedback. The resulting semi-supervised gcWGAN is assessed with the oracle over 100 novel folds not in the training set and found to generatemore yields and cover 3.6 times more target folds compared to a competing data-driven method ([cVAE](https://github.com/psipred/protein-vae)). Assessed with structure predictor over representative novel folds (including one not even part of basisfolds), gcWGAN designs are found to have comparable or better fold accuracy yet much more sequencediversity and novelty than cVAE. gcWGAN explores uncharted sequence space to design proteins bylearning from current sequence-structure data. The ultra fast data-driven model can be a powerful additionto principle-driven design methods through generating seed designs or tailoring sequence space.
 
 ![Training-Process](/gcWGAN/Training-Process.png)
 
@@ -89,7 +89,7 @@ fold b.76: ssfkpvvrglriyslkkfpevykpkagnrfysirrllqegqmcrtvkyrkgiikgpkyqtscemakaqa
 
 ## Evaluate Model Performance:
 
-This part contains the scripts we applied to evaluate the performance of our model. We also generate several sequences with the previouse state-of-art model [cVAE](https://github.com/psipred/protein-vae) and applied our evaluation method for comparison. Model evalustion consists of three part, model accuracy, sequence generating rate and sequence diversity and novelty, which reflect the model performance on different aspects. Go to the ***Model_Evaluation*** folder for more details.
+This part contains the scripts we applied to evaluate the performance of our model. We also generate several sequences with the previouse state-of-art model cVAE and applied our evaluation method for comparison. Model evalustion consists of three part, model accuracy, sequence generating rate and sequence diversity and novelty, which reflect the model performance on different aspects. Go to the ***Model_Evaluation*** folder for more details.
 
 ***
 
