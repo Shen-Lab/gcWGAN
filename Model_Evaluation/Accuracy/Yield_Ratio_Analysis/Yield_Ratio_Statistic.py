@@ -27,6 +27,9 @@ from keras.layers.normalization import BatchNormalization
 PATH = sys.argv[1]
 EPOCH = sys.argv[2]
 
+SEQ_LEN = 160 # Sequence length in characters
+MAX_N_EXAMPLES = 50000
+
 if 'gcWGAN' in PATH:
     result_path = '../../../Results/Accuracy/Yield_Ratio_Result/gcWGAN/'
 elif 'cWGAN' in PATH:
