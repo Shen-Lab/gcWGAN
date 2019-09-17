@@ -94,8 +94,8 @@ This part contains the scripts we applied to evaluate the performance of our mod
 ***
 
 ## Citation:
-
-@article {gcWGAN,
+```
+@article {gcWGAN2019,
         author = {Karimi, Mostafa and Zhu, Shaowen and Cao, Yue and Shen, Yang},
         title = {De Novo Protein Design for Novel Folds using Guided Conditional Wasserstein Generative Adversarial Networks (gcWGAN)},
         elocation-id = {769919},
@@ -105,6 +105,7 @@ This part contains the scripts we applied to evaluate the performance of our mod
         URL = {https://www.biorxiv.org/content/early/2019/09/14/769919}
         journal = {bioRxiv}
 }
+```
 ***
 
 ## Contacts:
