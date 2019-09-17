@@ -16,6 +16,10 @@ Open the file ***~/.keras/keras.json***, and set "backend" to be "theano", which
     "backend": "theano"
 }
 ```
+***
+
+## For cWGAN and gcWGAN
+
 * **Yield Ratio of a Certain Fold base on a Certain Check point:** 
 ```
 python Yield_Ratio_calculation.py <check point path>  <epoch index>  <fold> 
@@ -27,6 +31,10 @@ The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_
 python Yield_Ratio_Statistic.py <check point path>  <epoch index>
 ```
 The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/\<set name\>/*** , while "set name" = "train", "vali" or "test".
+
+***
+
+## For cVAE
 
 For comparison we also applied the previous state-of-art model, [cVAE](https://github.com/psipred/protein-vae) to calculate the yield ratios. To do this, firstly go to the ***Yield_Ratio_Samples/cVAE_Samples*** folder and download the sequences inside it with the link below. Then run the following codes.
 
