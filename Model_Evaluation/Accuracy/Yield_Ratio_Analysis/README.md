@@ -18,7 +18,7 @@ Open the file ***~/.keras/keras.json***, and set "backend" to be "theano", which
 ```
 ***
 
-## For cWGAN and gcWGAN
+## For cWGAN and gcWGAN:
 
 * **Yield Ratio of a Certain Fold base on a Certain Check point:** 
 ```
@@ -34,7 +34,7 @@ The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_
 
 ***
 
-## For cVAE
+## For cVAE:
 
 For comparison we also applied the previous state-of-art model, [cVAE](https://github.com/psipred/protein-vae) to calculate the yield ratios. To do this, firstly go to the ***Yield_Ratio_Samples/cVAE_Samples*** folder and download the sequences inside it with the link below. Then run the following codes.
 
