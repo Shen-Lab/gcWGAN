@@ -1,6 +1,6 @@
 # Yield Ratio:
 Yield ratio reflects the portion of the sequences that pass the oracle, which can reflect the model accuracy. To calculate the yield ratio, read the following steps. 
-* **Load and Set Environment**
+* **Load and Set Environment:**
 ```
 module load Anaconda/2-5.0.1
 source activate DeepDesign_acc
