@@ -54,11 +54,7 @@ if not os.path.exists(check_path):
     os.system('mkdir ' + check_path)
 if not os.path.exists('WarmStart_Samples'):
     os.system('mkdir WarmStart_Samples')
-<<<<<<< HEAD
 if not os.path.exists(sample_path):
-=======
-f not os.path.exists(sample_path):
->>>>>>> f50a03232974e339a39a7305a9bb7c3e30aef74d
     os.system('mkdir ' + sample_path)
 
 #os.system('mkdir Check_Points_Pretrain')

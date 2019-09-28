@@ -66,13 +66,8 @@ name = '_' + str(Learning_rate) + '_' + str(CRITIC_ITERS) + '_' + str(noise_len)
 
 check_path = '../Checkpoints/gcWGAN/Checkpoints'+name
 sample_path = 'gcWGAN_Training_Samples/TrainingSamples'+name
-<<<<<<< HEAD
 os.system('mkdir ' + check_path)
 os.system('mkdir ' + sample_path)
-=======
-#os.system('mkdir ' + check_path)
-#os.system('mkdir ' + sample_path)
->>>>>>> f50a03232974e339a39a7305a9bb7c3e30aef74d
 if not os.path.exists('../Checkpoints'):
     os.system('mkdir ../Checkpoints')
 if not os.path.exists('../Checkpoints/gcWGAN'):
@@ -81,14 +76,8 @@ if not os.path.exists(check_path):
     os.system('mkdir ' + check_path)
 if not os.path.exists('gcWGAN_Training_Samples'):
     os.system('mkdir gcWGAN_Training_Samples')
-<<<<<<< HEAD
 if not os.path.exists(sample_path):
     os.system('mkdir ' + sample_path)
-=======
-f not os.path.exists(sample_path):
-    os.system('mkdir ' + sample_path)
-
->>>>>>> f50a03232974e339a39a7305a9bb7c3e30aef74d
 lib.print_model_settings(locals().copy())
 
 ###### DeepSF
