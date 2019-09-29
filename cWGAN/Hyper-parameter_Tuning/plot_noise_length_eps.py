@@ -8,8 +8,8 @@ if not os.path.exists('cWGAN_Validation_Results'):
 if not os.path.exists('cWGAN_Validation_Results/cWGAN_Validation_Images'):
     os.system('mkdir cWGAN_Validation_Results/cWGAN_Validation_Images')
 
-hp_list = ['64','128','256','512']
-show_list = ['  64','128','256','512']
+hp_list = ['64','128','256']
+show_list = ['  64','128','256']
 num = len(hp_list)
 
 Cri = []
@@ -20,7 +20,7 @@ Nov = []
 PR = []
 
 for i in range(num):
-    index = '0.0002_20_' + hp_list[i] 
+    index = '0.0001_20_' + hp_list[i] 
 
     cr = DL.file_list('../cWGAN_Training_Samples/TrainingSamples_' + index +'/Critic_Cost')
     cr = [-float(j) for j in cr[0:100]]
