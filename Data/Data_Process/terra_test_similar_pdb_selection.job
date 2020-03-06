@@ -1,0 +1,21 @@
+#!/bin/bash
+##ENVIRONMENT SETTINGS; CHANGE WITH CAUTION
+#SBATCH --export=NONE                #Do not propagate environment
+#SBATCH --get-user-env=L             #Replicate login environment
+
+##NECESSARY JOB SPECIFICATIONS
+#SBATCH --job-name=test_similar_pdb_selection
+#SBATCH --time=20:00:00              
+#SBATCH --ntasks=1
+#SBATCH --nodes=1                    #Request 1 node
+#SBATCH --ntasks-per-node=1         #Request 28 tasks/cores per node
+#SBATCH --mem=10G                  
+#SBATCH --output=Output/output_test_similar_pdb_selection
+
+##OPTIONAL JOB SPECIFICATIONS
+#SBATCH --mail-type=ALL              #Send email on all job events
+#SBATCH --account=122821643660       #Set billing account to 
+
+#First Executable Line
+module load Anaconda/2-5.0.1
+python similar_pdb_selection.py ../Datasets/Final_Data/fold_test ../Datasets/cVAE_Data/cVAE_training_data/cVAE_training_pdb_noTER/ ../Datasets/cVAE_Data/gcWGAN_test_similar_cVAE_training

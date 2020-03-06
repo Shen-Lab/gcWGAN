@@ -1,3 +1,10 @@
+##################################################################################################
+# gcWGAN Training Process.
+# Requirement: Weights of the DeepSF model
+#              Check points from the semi-supervised learning
+##################################################################################################
+
+################################### Load Packages ################################################
 import os, sys
 sys.path.append(os.getcwd())
 
@@ -29,15 +36,8 @@ from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import LeakyReLU
 from keras.layers.pooling import MaxPooling1D,GlobalAveragePooling1D
 
+################################### Set Global Parameters ############################################
 
-
-DATA_DIR = '../Data/Datasets/Final_Data/'
-if len(DATA_DIR) == 0:
-    raise Exception('Please specify path to data directory in gan_language.py!')
-
-"""
-SZ change. Set parameters as input arguments.
-"""
 Learning_rate = float(sys.argv[1])
 CRITIC_ITERS = int(sys.argv[2]) # How many critic iterations per generator iteration. We
                   # use 10 for the results in the paper, but 5 should work fine
@@ -45,11 +45,8 @@ CRITIC_ITERS = int(sys.argv[2]) # How many critic iterations per generator itera
 noise_len = int(sys.argv[3])
 LAMBDA_g = float(sys.argv[4])
 
-"""
-"""
-
 BATCH_SIZE = 64 # Batch size
-ITERS = 1500 # How many iterations to train for
+ITERS = 6000 # How many iterations to train for
 SEQ_LEN = 160 # Sequence length in characters
 DIM = 512 # Model dimensionality. This is fairly slow and overfits, even on
           # Billion Word. Consider decreasing for smaller datasets.
@@ -61,9 +58,11 @@ MAX_N_EXAMPLES = 50000 # Max number of data examples to load. If data loading
 fold_len = 20 #MK add
 name = '_' + str(Learning_rate) + '_' + str(CRITIC_ITERS) + '_' + str(noise_len) + '_' + str(LAMBDA_g)+'_semi_diff'
 
-#os.system('mkdir Checkpoints'+name)
-#os.system('mkdir TrainingSamples'+name)
+################################### Set Paths ####################################################
 
+DATA_DIR = '../Data/Datasets/Final_Data/'
+if len(DATA_DIR) == 0:
+    raise Exception('Please specify path to data directory in gan_language.py!')
 check_path = '../Checkpoints/gcWGAN/Checkpoints'+name
 sample_path = 'gcWGAN_Training_Samples/TrainingSamples'+name
 os.system('mkdir ' + check_path)
@@ -80,7 +79,7 @@ if not os.path.exists(sample_path):
     os.system('mkdir ' + sample_path)
 lib.print_model_settings(locals().copy())
 
-###### DeepSF
+################################### Load Oracle (DeepSF) ##############################################
 
 model_file="./DeepSF_model_weight/model-train-DLS2F.json"
 model_weight="./DeepSF_model_weight/model-train-weight-DLS2F.h5"
@@ -149,7 +148,27 @@ def _conv_bn_leakyrelu1D_resnet(nb_filter, nb_row, subsample,use_bias=True): #MK
 
     return f
 
-#### DeepSF
+def prepare_seq_deepsf(inp,batch_size,len_feature):
+  num = batch_size
+  check = tf.zeros([len_feature],tf.int32)
+  for i in range(num):
+      x = tf.slice(inp,[i,0],[1,len_feature])
+      x = tf.cast(tf.reshape(x,[len_feature]),tf.int32)
+      s = tf.subtract(tf.constant(len_feature),tf.reduce_sum(tf.sign(x)))
+      x = tf.cond(tf.greater_equal(s,tf.constant(len_feature,tf.int32)),lambda:tf.add(x,tf.scatter_nd(tf.constant([[0]]),tf.constant([1]) , tf.constant([len_feature]))),lambda:x)
+      index = tf.cond(tf.less_equal(s,tf.constant(0,tf.int32)),lambda:tf.constant(len_feature,tf.int32),lambda:tf.argmax(tf.cast(tf.less_equal(x,tf.constant(0,tf.int32)),tf.int32),output_type=tf.int32))
+      x = tf.slice(x,[0],[index])
+      x = tf.reshape(x,[1,index])
+      x = tf.one_hot(tf.subtract(x,tf.ones([1,index],tf.int32)),20)
+      x = tf.cond(tf.less_equal(s,tf.constant(0,tf.int32)),lambda:x,lambda:tf.concat([x,tf.zeros([1,tf.subtract(tf.constant(len_feature),index),20])],axis=1))
+      if i==0:
+         output = tf.identity(x)
+      else:
+         output = tf.concat([output,x],axis=0)
+
+  return output
+
+################################### Load Data ####################################################
 
 seqs, folds, folds_name, folds_dict, charmap, inv_charmap = language_helpers.load_dataset_protein( #MK change
     max_length=SEQ_LEN,
@@ -166,41 +185,12 @@ def file_list(path):
        result.append(line)
     return result
 
-
-#inter_dic = Assessment.Interval_dic(DATA_DIR + 'Interval_1.fa') #SZ add
-#unique_train = Assessment.file_list(DATA_DIR + 'unique_fold_train') #SZ add
-#unique_new = Assessment.file_list(DATA_DIR + 'unique_fold_new')  #SZ add
 unique_train = file_list(DATA_DIR + 'unique_fold_train') #SZ add
 unique_new = file_list(DATA_DIR + 'unique_fold_new')  #SZ add
 
-
 print 'Data loading successfully!'
 
-
-def prepare_seq_deepsf(inp,batch_size,len_feature):
-  num = batch_size
-  check = tf.zeros([len_feature],tf.int32)
-  for i in range(num):
-      x = tf.slice(inp,[i,0],[1,len_feature])
-      x = tf.cast(tf.reshape(x,[len_feature]),tf.int32)
-      #s = tf.reduce_sum(tf.cast(tf.equal(x,check),tf.int32))
-      s = tf.subtract(tf.constant(len_feature),tf.reduce_sum(tf.sign(x)))
-      #x = tf.cond(tf.equal(s,tf.constant(len_feature,tf.int32)),lambda:tf.add(x,tf.scatter_nd(tf.constant([[0]]),tf.constant([1]) , tf.constant([len_feature]))),lambda:x)
-      x = tf.cond(tf.greater_equal(s,tf.constant(len_feature,tf.int32)),lambda:tf.add(x,tf.scatter_nd(tf.constant([[0]]),tf.constant([1]) , tf.constant([len_feature]))),lambda:x)
-      #index = tf.cond(tf.equal(s,tf.constant(0,tf.int32)),lambda:tf.constant(len_feature,tf.int32),lambda:tf.argmax(tf.cast(tf.equal(x,tf.constant(0,tf.int32)),tf.int32),output_type=tf.int32))
-      index = tf.cond(tf.less_equal(s,tf.constant(0,tf.int32)),lambda:tf.constant(len_feature,tf.int32),lambda:tf.argmax(tf.cast(tf.less_equal(x,tf.constant(0,tf.int32)),tf.int32),output_type=tf.int32))
-      x = tf.slice(x,[0],[index])
-      x = tf.reshape(x,[1,index])
-      x = tf.one_hot(tf.subtract(x,tf.ones([1,index],tf.int32)),20)
-      #x = tf.cond(tf.equal(s,tf.constant(0,tf.int32)),lambda:x,lambda:tf.concat([x,tf.zeros([1,tf.subtract(tf.constant(len_feature),index),20])],axis=1))
-      x = tf.cond(tf.less_equal(s,tf.constant(0,tf.int32)),lambda:x,lambda:tf.concat([x,tf.zeros([1,tf.subtract(tf.constant(len_feature),index),20])],axis=1))
-      if i==0:
-         output = tf.identity(x)
-      else:
-         output = tf.concat([output,x],axis=0)
-
-  return output
-
+####################### Construct the Structure of the Model ########################################
 
 def softmax(logits):
     return tf.reshape(
@@ -228,8 +218,6 @@ def ResBlock_v2(name, inputs,size): #MK add
     output = tf.nn.relu(output)
     output = lib.ops.conv1d.Conv1D(name+'.2', size, size, 5, output)
     return inputs + (0.3*output)
-
-
 
 def Generator(n_samples, labels, prev_outputs=None): #MK change
     output = make_noise(shape=[n_samples, noise_len])
@@ -262,21 +250,19 @@ def Discriminator(inputs,labels): #MK change
     output = lib.ops.linear.Linear('Discriminator.output',300 , 1, output) #MK add
     return output
 
+####################### Construct the Loss Functions #########################################
+
 real_inputs_discrete = tf.placeholder(tf.int32, shape=[BATCH_SIZE, SEQ_LEN])
 real_inputs = tf.one_hot(real_inputs_discrete, len(charmap))
 real_inputs_label_deepsf = tf.placeholder(tf.int32, shape=[BATCH_SIZE,])
-#real_inputs_label_deepsf = tf.placeholder(tf.int32, shape=[BATCH_SIZE,num_fold])
 real_inputs_label = tf.placeholder(tf.float32, shape=[BATCH_SIZE, fold_len]) #MK add
 fake_inputs = Generator(BATCH_SIZE,real_inputs_label) #MK change
 fake_inputs_discrete = tf.argmax(fake_inputs, fake_inputs.get_shape().ndims-1)
 
-#fake_inputs_discrete_deepsf = prepare_seq_deepsf(fake_inputs_discrete,BATCH_SIZE,SEQ_LEN)
 fake_inputs_deepsf = tf.nn.softmax(tf.slice(fake_inputs,[0,0,0],[BATCH_SIZE,SEQ_LEN,20]))
-#########DeepSF
 
 DLS2F_input_shape =(None,20)
 filter_sizes=[6,10]
-#DLS2F_input = Input(tensor=fake_inputs_discrete_deepsf)
 DLS2F_input = Input(tensor=fake_inputs_deepsf)
 DLS2F_convs = []
 for fsz in filter_sizes:
@@ -305,18 +291,11 @@ DLS2F_dropout1 = Dropout(0.2)(DLS2F_dense1)
 DLS2F_output = Dense(output_dim=1215, init="he_normal", activation="softmax")(DLS2F_dropout1)
 
 DLS2F_ResCNN = Model(input=[DLS2F_input], output=DLS2F_output)
-#DLS2F_ResCNN.load_weights(model_weight)
-#DLS2F_ResCNN.trainable = False
 
-#topK = 10
-#topK_values,topK_indices = tf.nn.top_k(DLS2F_output, topK)
-#topK_sum = tf.reduce_sum(topK_values,axis=1)-0.01
-#topK_min = tf.reduce_min(topK_values,axis=1)
 top1 = tf.reduce_max(DLS2F_output,axis=1)-0.01
 top10_app = 0.1*top1
 ind = tf.concat([tf.reshape(tf.range(BATCH_SIZE),[BATCH_SIZE,1]),tf.reshape(real_inputs_label_deepsf,[BATCH_SIZE,1])],axis=1)
 actual_val = tf.gather_nd(DLS2F_output,ind)
-#predicted_y = tf.cast(tf.greater(tf.subtract(actual_val,topK_min),tf.cast(tf.constant(0),dtype=tf.float32)),dtype=tf.float32)
 predicted_y = tf.maximum(tf.subtract(actual_val,top10_app),0)
 predicted_y_inv = 10*tf.minimum(tf.subtract(actual_val,top10_app),0)
 # previous implementation
@@ -349,15 +328,33 @@ G_cost = []  #SZ add
 D_cost = []  #SZ add
 D_probability = [] #SZ add
 
-
-
 gen_params = lib.params_with_name('Generator.')
 disc_params = lib.params_with_name('Discriminator.')
+
+####################### Set the Optimizers ##########################################################
 
 gen_train_op = tf.train.AdamOptimizer(learning_rate=Learning_rate, beta1=0.5, beta2=0.9).minimize(gen_cost, var_list=gen_params)
 disc_train_op = tf.train.AdamOptimizer(learning_rate=Learning_rate, beta1=0.5, beta2=0.9).minimize(disc_cost, var_list=disc_params)
 
-# Dataset iterator
+####################### Load the Indexes of the Checkpoints #########################################
+
+check_dic = {}
+f_list = os.listdir('../Checkpoints/WarmStart/Labeled_Training/')
+for f in f_list:
+    f = f.split('.')[0].split('_')
+    if f[0] == 'model':
+        check_dic[f[1]] = f[2]
+
+check_index = sorted([int(i) for i in check_dic.keys()])
+c_restore = check_index[99]
+r_restore = int(check_dic[str(c_restore)])
+
+print c_restore,r_restore
+
+print 'Load the index of check points successfully!'
+
+###################################### Dataset iterator #############################################
+
 def inf_train_gen(seqs,folds,folds_name):
     epoch = 0 #SZ
     while True:
@@ -382,6 +379,8 @@ def inf_train_gen(seqs,folds,folds_name):
                 dtype='int32'
             ),epoch #SZ
 
+################################### Variables to be Saved ###########################################
+
 var_list = []
 var_list_others = []
 for v in tf.global_variables():
@@ -394,16 +393,22 @@ for v in tf.global_variables():
    if "beta2_power" in v.name:
       var_list_others.append(v)
 
+################################ Begin the Training Process ##########################################
 
 saver  = tf.train.Saver(var_list,max_to_keep=None)
 
 with tf.Session() as session:
 
-    saver.restore(session,"../Checkpoints/WarmStart/Labeled_Training/model_100_1495.ckpt")
+    ###### load the check points from the semi-supervised learning process and DeepSF ################
+
+    saver.restore(session,"../Checkpoints/WarmStart/Labeled_Training/model_"+str(c_restore)+"_" + check_dic[str(c_restore)] + ".ckpt")
     DLS2F_ResCNN.load_weights(model_weight)
     DLS2F_ResCNN.trainable = False
-  
-    ## convert theano trained weights to tf: convolution weights should be fliped
+
+    """
+    convert theano trained weights to tf: convolution weights should be fliped 
+    """
+
     ops = []
     for layer in DLS2F_ResCNN.layers:
       if layer.__class__.__name__ in ['Convolution1D', 'Convolution2D', 'Convolution3D', 'AtrousConvolution2D']:
@@ -415,7 +420,7 @@ with tf.Session() as session:
     session.run(tf.variables_initializer(var_list_others))
      
     print 'initialize weights'
-
+          
     def generate_samples(label): #MK change
         samples = session.run(fake_inputs,feed_dict={real_inputs_label:label,K.learning_phase(): 0}) #MK change
         samples = np.argmax(samples, axis=2)
@@ -431,20 +436,22 @@ with tf.Session() as session:
 
     keys_all = folds_dict.keys() #SZ change 
     l_all = len(keys_all) #SZ change
+    
+    ####################### Begin the Iterations ########################################
 
     ep_before = 0 #SZ add
-
+   
     for iteration in xrange(ITERS):
         start_time = time.time()
         print(iteration)
-        # Train generator
+        ################################ Generator Training #############################################
         if iteration > 0:
             s,f,f_deepsf,epoch = gen.next() #MK add
             g_cos,_ = session.run([gen_cost,gen_train_op],feed_dict={real_inputs_label:f,real_inputs_label_deepsf:f_deepsf,K.learning_phase(): 0}) #MK change
             G_cost.append(g_cos)  #SZ add
 
 
-        # Train critic
+        #################################### Critic Training ############################################
         for i in xrange(CRITIC_ITERS):
             s,f,f_deepsf,epoch = gen.next() #MK change
             _disc_cost, _ = session.run(
@@ -458,6 +465,8 @@ with tf.Session() as session:
 
         lib.plot.plot('time', time.time() - start_time)
         lib.plot.plot('train disc cost', _disc_cost)
+         
+        ################### Each epoch: save the checkpoints and generatred samples ######################
 
         if epoch != ep_before:
             ep_before = epoch
@@ -487,20 +496,4 @@ with tf.Session() as session:
 
  
         lib.plot.tick()
-
-
-plt.figure(1) #SZ add
-plt.plot(D_cost) #SZ add
-plt.title("Critic Loss Function")
-plt.xlabel("iteration number")
-plt.ylabel("critic cost")
-plt.savefig('Images/Critic'+name+'.png')
-plt.figure(2) #SZ add
-plt.plot(G_cost) #SZ add
-plt.title("Generator Loss Function")
-plt.xlabel("iteration number")
-plt.ylabel("generator cost")
-plt.savefig('Images/Generator'+name+'.png')
-plt.show() #SZ add
-                                         
 

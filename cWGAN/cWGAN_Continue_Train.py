@@ -49,7 +49,7 @@ CRITIC_ITERS = int(INDEX[1]) # How many critic iterations per generator iteratio
 noise_len = int(INDEX[2])
 
 BATCH_SIZE = 64 # Batch size
-ITERS = 3000 # How many iterations to train for#
+ITERS = 6000 # How many iterations to train for#
 SEQ_LEN = 160 # Sequence length in characters
 DIM = 512 # Model dimensionality. This is fairly slow and overfits, even on
           # Billion Word. Consider decreasing for smaller datasets.

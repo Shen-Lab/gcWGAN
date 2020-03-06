@@ -7,7 +7,15 @@
 * Build the environment ***DeepDesign_acc*** following the instruction in the ***Environments*** folder.
 
 ## Table of contents:
+* **WarmStart:** Contain the codes for the semi-supervised learning process (training with the unlabeled data from Uniref and the labeled data from SCOPe).
+* **DeepSF_model_weignt:** Contain the weights for DeepSF.
+* **Converge_Check_Result:** Contain the loss on each epoch calculated for different models to show the model convergence.
+* **tflib:** Contain some packages for gcWGAN. Need to be imported for related codes.
+* **language_helpers:** Contain the functions to help load the training data. Need to be imported for related codes.
+* **DataLoading.py:** Contain the functions to help load and process the data. Need to be imported for related codes.
 * **gcWGAN_training.py:** Main code for gcWGAN Training.
+* **gcWGAN_withoutSemi:** gcWGAN training without semi-supervised learning part.
+* **gcWGAN_loss_calculate:** Code to calculate the generator loss, the critic loss and the overall loss for each epoch of model.
 
 ## Operations:
 * **Load and Set Environment**
@@ -32,9 +40,17 @@ python Pretrain_WGAN.py
 ```
 Then run
 ```
-python Semi_WGAN  
+python Semi_WGAN.py  
 ```
 * **To train the model:**
 ```
-python gcWGAN_Training.py <learning rate>  <critic iteration number>  <noise length>  <feedback penalty weight>
+python gcWGAN_training.py <learning rate>  <critic iteration number>  <noise length>  <feedback penalty weight>
+```
+* **To train the model without semi-supervised learning:**
+```
+python gcWGAN_training_withoutSemi.py 
+```
+* **To calculate the loss:**
+```
+python gcWGAN_loss_calculation.py <check points path>  <results path>
 ```

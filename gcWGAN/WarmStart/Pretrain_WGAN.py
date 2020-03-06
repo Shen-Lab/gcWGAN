@@ -23,10 +23,10 @@ if len(DATA_DIR) == 0:
 SZ change. Set parameters as input arguments.
 """
 Learning_rate = 0.0001
-CRITIC_ITERS = 20 # How many critic iterations per generator iteration. We
+CRITIC_ITERS = 5 # How many critic iterations per generator iteration. We
                   # use 10 for the results in the paper, but 5 should work fine
                   # as well.
-noise_len = 128
+noise_len = 64
 
 """
 """
@@ -74,7 +74,6 @@ seqs_p = data_helpers.load_dataset_protein_pretrain( #MK change
     data_dir=DATA_DIR
 )
 
-inter_dic = DataLoading.Interval_dic(DATA_DIR + 'Interval_1.fa') #SZ add
 unique_train = DataLoading.file_list(DATA_DIR + 'unique_fold_train') #SZ add
 unique_new = DataLoading.file_list(DATA_DIR + 'unique_fold_new')  #SZ add
 mean_file = open(DATA_DIR + 'folds_means','r')

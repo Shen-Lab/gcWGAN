@@ -154,7 +154,7 @@ def load_dataset_protein(max_length, max_n_examples, tokenize=False, max_vocab_s
 
     pad = "!" # use ! for padding
     folds_dict = {}
-    path = data_dir+"folds_coordinate_new"
+    path = data_dir+"folds_coordinate"
     with open(path, 'r') as f:
             for line in f:
                 line = line.strip().split()
@@ -240,3 +240,68 @@ def load_dataset_protein_pretrain(max_length, max_n_examples, tokenize=False, ma
   
     print "loaded {} lines in dataset".format(len(seqs))
     return seqs
+
+def load_dataset_protein_diffset(max_length, max_n_examples, set_kind,tokenize=False, max_vocab_size=21, data_dir='../Data/Datasets/Final_Data/'):
+    print "loading dataset..."
+
+    pad = "!" # use ! for padding
+    folds_dict = {}
+    path = data_dir+"folds_coordinate"
+    with open(path, 'r') as f:
+            for line in f:
+                line = line.strip().split()
+                key = line[0]
+                value = line[1:]
+                value = [float(v) for v in value]
+                folds_dict[key] = value
+
+    seqs = []
+    folds = []
+    finished = False
+
+    if set_kind == 'train':
+        seq_file = 'seq_train'
+        fold_file = 'fold_train'
+    elif set_kind == 'vali':
+        seq_file = 'seq_vali'
+        fold_file = 'fold_label_vali'
+    elif set_kind == 'test':
+        seq_file = 'seq_test'
+        fold_file = 'fold_label_test'
+    else:
+        print 'Error! No set named %s'%set_kind
+        quit()
+    with open(data_dir+seq_file) as file1, open(data_dir+fold_file) as file2:
+            for s, f in izip(file1, file2):
+                s = s.strip()
+                f = f.strip()
+
+                if tokenize:
+                    s = tokenize_seq(s)
+                else:
+                    s = tuple(s)
+                if len(s) > max_length:
+                    continue
+
+                s = s + ( (pad,)*(max_length-len(s)) ) # padding
+                seqs.append(s)
+                
+                f = folds_dict[f]
+                folds.append(f)
+                if len(seqs) == max_n_examples:
+                    finished = True
+                    break
+
+    indices = np.arange(len(seqs),dtype=np.int)
+    np.random.shuffle(indices)
+    seqs =  [ seqs[i] for i in indices]
+    folds =  [ folds[i] for i in indices]
+
+    charmap = {'!':0,'a':1,'r':2,'n':3,'d':4,'c':5,'q':6,'e':7,'g':8,
+               'h':9,'i':10,'l':11,'k':12,'m':13,'f':14,'p':15,'s':16,
+               't':17,'w':18,'y':19,'v':20}
+    inv_charmap = ['!','a','r','n','d','c','q','e','g','h','i',
+                   'l','k','m','f','p','s','t','w','y','v']
+    print "loaded {} lines in dataset".format(len(seqs))
+    return seqs, folds, folds_dict, charmap, inv_charmap
+

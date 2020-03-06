@@ -17,6 +17,7 @@ matrix = matlist.blosum62 #SZ add
 import os
 
 test_index = sys.argv[1]
+set_kind = sys.argv[2]
 
 sample_path = 'cWGAN_Validation_Samples/Identity_PaddingRatio_Sample_' + test_index
 check_path = '../../Checkpoints/cWGAN/model_' + test_index
@@ -54,14 +55,13 @@ seqs, folds, folds_dict, charmap, inv_charmap = data_helpers.load_dataset_protei
     max_n_examples=MAX_N_EXAMPLES,
     data_dir=DATA_DIR
 )
-#test_trad = Assessment.file_dic(DATA_DIR+'seq_test_trad',DATA_DIR+'fold_test_trad')
 
 #BATCH_SIZE = 1000
 f_s_dic = Assessment.Train_dic(DATA_DIR + 'fold_train',DATA_DIR + 'seq_train') #SZ add
 inter_dic = Assessment.Interval_dic(DATA_DIR + 'Interval_1.fa') #SZ add
 unique_train = Assessment.file_list(DATA_DIR + 'unique_fold_train') #SZ add
 unique_new = Assessment.file_list(DATA_DIR + 'unique_fold_new')  #SZ add
-rep_dic = Assessment.representative_dic(DATA_DIR + 'cluster_result_03',f_s_dic)
+rep_dic = Assessment.representative_dic(DATA_DIR + 'cluster_result',f_s_dic)
 
 print 'Data loading successfully!'
 
@@ -208,11 +208,6 @@ with tf.Session() as session:
    
     start_time = time.time()
      
-    #Identity = []
-    #Coverage = []
-    #N_alignment = []
-    #Padding_Ratio = []
-
     file_i = open('cWGAN_Validation_Results/Identity_' + test_index,'w')
     file_pad = open('cWGAN_Validation_Results/Padding_Ratio_' + test_index,'w')
     file_i.close()
@@ -229,13 +224,11 @@ with tf.Session() as session:
         file_s = open(sample_path + '/Samples_' + test_index + '_' + str(c),'w')
     
         Ide = []
-        Cov = []
-        N_al = []
         P_R = []
 
         for cla in rep_dic.keys():
             l_f = len(rep_dic[cla].keys())
-            selected_num = round(l_f/10)
+            selected_num = round(l_f/10.0)
             if selected_num <= 0:
                 selected_num += 1
             selected_fold = np.random.choice(rep_dic[cla].keys(),int(selected_num))
@@ -251,7 +244,7 @@ with tf.Session() as session:
                     samples_strip = [''.join(sam) for sam in samples]
                     for sam in samples_strip:
                         samp = sam.strip('!')
-                        if (samp != '') and (not ('!' in samp)):
+                        if ((samp != '') and (not ('!' in samp))) and (sam[0] != '!'):
                             samples_f.append(samp)
                             padding_num += (len(sam) - len(samp))
                             num += 1
@@ -261,23 +254,14 @@ with tf.Session() as session:
                 for s in samples_f:
                     file_s.write(s + '\n')
                 file_s.write('\n')
-                ide,cov,n_al = Assessment.average_alignment(samples_f,rep_dic[cla][f],matrix)
+                ide = Assessment.average_Identity(samples_f,rep_dic[cla][f],matrix)
            
                   
                 Ide.append(ide)
-                Cov.append(cov)
-                N_al.append(n_al)
                 P_R.append( float(padding_num) / float(GENERATE_SIZE * SEQ_LEN) )
 
         ident = np.mean(Ide)
-        cover = np.mean(Cov)
-        n_alig = np.mean(N_al)
         pad_ratio = np.mean(P_R)
-
-        #Identity.append(ident)
-        #Coverage.append(cover)
-        #N_alignment.append(n_alig)
-        #Padding_Ratio.append(pad_ratio)
 
         end = time.time()
 
@@ -290,36 +274,3 @@ with tf.Session() as session:
 
     end_time = time.time()
 
-#print 'Running Time:',end_time - start_time,'s'
-
-"""
-plt.figure(1)
-plt.plot(Check_selected,Identity) #SZ add
-plt.ylim(ymin = 0)
-plt.title("Sequence Identity")
-plt.ylabel("identity")
-plt.xlabel("epoch")
-plt.savefig('Images/'+ 'Identity_'+ test_index + '.png')
-plt.figure(2)
-plt.plot(Check_selected,Coverage) #SZ add
-plt.ylim(ymin = 0)
-plt.title("Sequence Coverage")
-plt.ylabel("coverage")
-plt.xlabel("epoch")
-plt.savefig('Images/'+ 'Coverage_'+ test_index + '.png')
-plt.figure(3)
-plt.plot(Check_selected,N_alignment) #SZ add
-plt.ylim(ymin = 0)
-plt.title("Normalized Alignment Score")
-plt.ylabel("normalized alignment score")
-plt.xlabel("epoch")
-plt.savefig('Images/'+ 'N_alignment_score_'+ test_index + '.png')           
-plt.figure(4)
-plt.plot(Check_selected,Padding_Ratio) #SZ add
-plt.ylim(ymin = 0, ymax = 1)
-plt.title("Padding Ratio")
-plt.ylabel("padding_ratio")
-plt.xlabel("epoch")
-plt.savefig('Images/'+ 'Padding_Ratio_Train_'+ test_index + '_from Novelty.png')
-plt.show()
-"""

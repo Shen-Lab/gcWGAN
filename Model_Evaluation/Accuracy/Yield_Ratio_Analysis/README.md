@@ -16,6 +16,7 @@ Open the file ***~/.keras/keras.json***, and set "backend" to be "theano", which
     "backend": "theano"
 }
 ```
+
 ***
 
 ## For cWGAN and gcWGAN:
@@ -25,7 +26,10 @@ Open the file ***~/.keras/keras.json***, and set "backend" to be "theano", which
 python Yield_Ratio_calculation.py <check point path>  <epoch index>  <fold> 
 ```
 The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/*** with a name of the fold name. "model name" is "cWGAN" or "gcWGAN". "model index" is related to the name where you put the check points and the epoch index.
-
+* **Calculate Yield Ratio for All the Folds on [Terra](https://hprc.tamu.edu/wiki/Terra):** Change the related information (account number, e-mail, job name, running hours, output file, etc.) in the ***create_job_yield_ratio.sh*** file. Then run 
+```
+./wrapper_yield_ratio_calculation.sh
+```
 * **Get the Statistics of the Yiled Ratios:** To run this step, you must have calculated the yield ratios for all the folds in the training, the validation and the test set. 
 ```
 python Yield_Ratio_Statistic.py <check point path>  <epoch index>

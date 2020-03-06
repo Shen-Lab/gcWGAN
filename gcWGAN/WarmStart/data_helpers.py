@@ -154,7 +154,7 @@ def load_dataset_protein(max_length, max_n_examples, tokenize=False, max_vocab_s
 
     pad = "!" # use ! for padding
     folds_dict = {}
-    path = data_dir+"folds_coordinate_new"
+    path = data_dir+"folds_coordinate"
     with open(path, 'r') as f:
             for line in f:
                 line = line.strip().split()
@@ -209,7 +209,7 @@ def load_dataset_protein(max_length, max_n_examples, tokenize=False, max_vocab_s
     print "loaded {} lines in dataset".format(len(seqs))
     return seqs, folds, folds_dict, charmap, inv_charmap
 
-def load_dataset_protein_pretrain(max_length, max_n_examples, tokenize=False, max_vocab_size=21, data_dir='Pretrain/'):
+def load_dataset_protein_pretrain(max_length, max_n_examples, tokenize=False, max_vocab_size=21, data_dir='../../Data/Datasets/Final_Data/'):
     print "loading dataset..."
 
     pad = "!" # use ! for padding

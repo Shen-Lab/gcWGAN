@@ -1,3 +1,5 @@
+################################ Import packages #################################
+
 import os, sys
 sys.path.append(os.getcwd())
 
@@ -24,6 +26,8 @@ from keras.models import Model
 from keras.layers import Activation, Dense, Dropout, Flatten, Input, Merge, Convolution1D
 from keras.layers.normalization import BatchNormalization
 
+############################## Set paths and parameters ################################
+
 GEN_NUM = int(sys.argv[1])
 FOLD = sys.argv[2]
 KIND = sys.argv[3]
@@ -36,15 +40,14 @@ if not os.path.exists('Pipeline_Sample'):
 fold_name = FOLD.split('.')[0] + '_' + FOLD.split('.')[1]
 
 if KIND == 'cWGAN':
-    check_point = '../../Checkpoints/cWGAN/model_0.0001_20_128/model_100_1495.ckpt'
+    check_point = '../../Checkpoints/cWGAN/model_0.0001_5_64/model_100_5233.ckpt'
 elif KIND == 'gcWGAN':
-    check_point = '../../Checkpoints/gcWGAN/Checkpoints_0.0001_20_128_0.01_semi_diff/model_100_1495.ckpt'
+    check_point = '../../Checkpoints/gcWGAN/Checkpoints_0.0001_5_64_0.02_semi_diff/model_100_5233.ckpt'
 else:
     print 'Error! Wrong Kind.'
     quit()
 
-noise_len = 128
-CRITIC_ITERS = 20
+noise_len = 64
 
 DATA_DIR = '../../Data/Datasets/Final_Data/'
 if len(DATA_DIR) == 0:
@@ -64,13 +67,15 @@ fold_len = 20 #MK add
 
 lib.print_model_settings(locals().copy())
 
+################################ Load Data #################################
+
 seqs, folds, folds_dict, charmap, inv_charmap = data_helpers.load_dataset_protein( #MK change
     max_length=SEQ_LEN,
     max_n_examples=MAX_N_EXAMPLES,
     data_dir=DATA_DIR
 )
 
-###### DeepSF
+################################ DeepSF ###########################
 
 class K_max_pooling1d(Layer):
     def __init__(self,  ktop, **kwargs):
@@ -115,6 +120,8 @@ DLS2F_CNN.compile(loss="categorical_crossentropy", metrics=['accuracy'], optimiz
 fold_index = DataLoading.Accuracy_index(path = 'DeepSF_model_weight_more_folds/fold_label_relation2.txt')
 
 print 'Data loading successfully!'
+
+################################ Structure of the model #################################
 
 def softmax(logits):
     return tf.reshape(
@@ -188,7 +195,7 @@ gen_cost = -tf.reduce_mean(disc_fake)
 
 # WGAN lipschitz-penalty
 alpha = tf.random_uniform(
-    shape=[BATCH_SIZE,1,1], 
+    shape=[BATCH_SIZE,1,1],
     minval=0.,
     maxval=1.
 )
@@ -198,22 +205,9 @@ gradients = tf.gradients(Discriminator(interpolates,real_inputs_label), [interpo
 slopes = tf.sqrt(tf.reduce_sum(tf.square(gradients), reduction_indices=[1,2]))
 gradient_penalty = tf.reduce_mean((slopes-1.)**2)
 
-saver  = tf.train.Saver()
+################################ Generate sequences #################################
 
-def file_dic(path):
-    fil = open(path,'r')
-    lines = fil.readlines()
-    dic = {}
-    for line in lines:
-        if line != '\n':
-            line = line.strip('\n').split(' ')
-            f = line[0].strip(':')
-            if f in dic.keys():
-                dic[f].append(line[1])
-            else:
-                dic[f] = [line[1]]
-    fil.close()
-    return dic
+saver  = tf.train.Saver()
 
 with tf.Session() as session:
 
@@ -235,10 +229,13 @@ with tf.Session() as session:
     saver.restore(session,check_point)
     print 'Restore Successfully!'
 
-    samples_f = []
+    #samples_f = []
     test_se = []
     num = 0
-    #novel_array = np.array(folds_dict[FOLD])
+
+    s_file = open('Pipeline_Sample/' + KIND + '_Fasta_' + str(GEN_NUM) + '_success_' + fold_name,'w')
+    s_file.close()    
+
     while(num < GEN_NUM):
         f_batch = [folds_dict[FOLD]] * BATCH_SIZE
         samples = generate_samples(f_batch)
@@ -246,7 +243,7 @@ with tf.Session() as session:
         for sa in samples:
             sam = ''.join(sa)
             samp = sam.strip('!')
-            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and (not ('!' in samp)):
+            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and ((not ('!' in samp)) and (sam[0] != '!')):
                 test_se.append(sa)     
   
         V_SIZE = len(test_se)   
@@ -259,24 +256,31 @@ with tf.Session() as session:
             for p in range(V_SIZE):
                 f_pre = [fold_index[i] for i in top_prediction[p]]
                 if FOLD in f_pre:
-                    samples_f.append(test_se[p])
+                    #samples_f.append(test_se[p])
                     num += 1
+                    s_file = open('Pipeline_Sample/' + KIND + '_Fasta_' + str(GEN_NUM) + '_success_' + fold_name,'a')
+                    sequ = ''.join(test_se[p])
+                    sequ = sequ.strip('!').upper()
+                    s_file.write('>' + str(num) + '\n')
+                    s_file.write(sequ + '\n')
+                    s_file.close()
+
                 if num >= GEN_NUM:
                     break
 
         if num >= GEN_NUM:
             break
         
-    samples_f = [''.join(sa) for sa in samples_f]
+#    samples_f = [''.join(sa) for sa in samples_f]
     
-    s_file = open('Pipeline_Sample/' + KIND + '_Fasta_' + str(GEN_NUM) + '_success_' + fold_name,'w')
-    s_index = 0
-    for i in range(GEN_NUM):
-        s = samples_f[i]
-        s = s.strip('!')
-        s = s.upper()
-        s_index += 1
-        s_file.write('>' + str(s_index) + '\n')
-        s_file.write(s + '\n')
+#    s_file = open('Pipeline_Sample/' + KIND + '_Fasta_' + str(GEN_NUM) + '_success_' + fold_name,'w')
+#    s_index = 0
+#    for i in range(GEN_NUM):
+#        s = samples_f[i]
+#        s = s.strip('!')
+#        s = s.upper()
+#        s_index += 1
+#        s_file.write('>' + str(s_index) + '\n')
+#        s_file.write(s + '\n')
 
-    s_file.close()
+#    s_file.close()

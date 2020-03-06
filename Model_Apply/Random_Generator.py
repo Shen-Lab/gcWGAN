@@ -29,8 +29,8 @@ GEN_NUM = int(sys.argv[2])
 SAMPLE_FILE = (sys.argv[3])
 
 if len(sys.argv) == 4:
-    check_path = '../Checkpoints/gcWGAN/model_0.0001_20_128_0.01_semi_diff/'
-    check_point = check_path + "model_100_1495.ckpt"
+    check_path = '../Checkpoints/gcWGAN/Checkpoints_0.0001_5_64_0.02_semi_diff/'
+    check_point = check_path + "model_100_5233.ckpt"
 elif len(sys.argv) == 6:
     check_path = sys.argv[4]
     Epoch = sys.argv[5]
@@ -63,60 +63,20 @@ MAX_N_EXAMPLES = 50000 # Max number of data examples to load. If data loading
                           # is too slow or takes too much RAM, you can decrease
                           # this (at the expense of having less training data).
 TOP_NUM = 10
-MIN_LEN = 91
+MIN_LEN = 60
 MAX_LEN = 160
 
 fold_len = 20 #MK add
 
 lib.print_model_settings(locals().copy())
 
+################################## Data Loading #########################################
+
 seqs, folds, folds_dict, charmap, inv_charmap = data_helpers.load_dataset_protein( #MK change
     max_length=SEQ_LEN,
     max_n_examples=MAX_N_EXAMPLES,
     data_dir=DATA_DIR
 )
-
-###### DeepSF
-
-class K_max_pooling1d(Layer):
-    def __init__(self,  ktop, **kwargs):
-        self.ktop = ktop
-        super(K_max_pooling1d, self).__init__(**kwargs)
-
-    def get_output_shape_for(self, input_shape):
-        return (input_shape[0],self.ktop,input_shape[2])
-
-    def call(self,x,mask=None):
-        output = x[T.arange(x.shape[0]).dimshuffle(0, "x", "x"),
-              T.sort(T.argsort(x, axis=1)[:, -self.ktop:, :], axis=1),
-              T.arange(x.shape[2]).dimshuffle("x", "x", 0)]
-        return output
-
-    def get_config(self):
-        config = {'ktop': self.ktop}
-        base_config = super(K_max_pooling1d, self).get_config()
-        return dict(list(base_config.items()) + list(config.items()))
-
-def create_aa_feature(inp,num):
-
-    num_class = 20
-    output = np.zeros((num,SEQ_LEN,num_class))
-    for i in range(num):
-        output[i,:,:] = np.eye(num_class)[inp[i,]-1]
-
-    return output
-
-model_file="./DeepSF_model_weight_more_folds/model-train-DLS2F.json"
-model_weight="./DeepSF_model_weight_more_folds/model-train-weight-DLS2F.h5"
-deepsf_fold="./DeepSF_model_weight_more_folds/fold_label_relation2.txt"
-kmaxnode=30
-
-json_file_model = open(model_file, 'r')
-loaded_model_json = json_file_model.read()
-json_file_model.close()
-DLS2F_CNN = model_from_json(loaded_model_json, custom_objects={'K_max_pooling1d': K_max_pooling1d})
-DLS2F_CNN.load_weights(model_weight)
-DLS2F_CNN.compile(loss="categorical_crossentropy", metrics=['accuracy'], optimizer="nadam")
 
 novel_file = open(COOR_FILE,'r')
 novel_lines = novel_file.readlines()
@@ -130,6 +90,8 @@ fold_vector = [float(i) for i in fold_vector]
 novel_array = np.array(fold_vector)
 
 print 'Data loading successfully!'
+
+######################## Structure of the Model ##########################################
 
 def softmax(logits):
     return tf.reshape(
@@ -260,7 +222,7 @@ with tf.Session() as session:
         for sa in samples:
             sam = ''.join(sa)
             samp = sam.strip('!')
-            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and (not ('!' in samp)):
+            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and ((not ('!' in samp)) and (sam[0] != '!')):
                 samples_f.append(sa)     
                 num += 1
                 if num >= GEN_NUM:

@@ -2,6 +2,7 @@ name: DeepDesign_acc
 channels:
   - defaults
 dependencies:
+  - _libgcc_mutex=0.1=main
   - alabaster=0.7.12=py27_0
   - anaconda=2018.12=py27_0
   - anaconda-client=1.7.2=py27_0
@@ -53,6 +54,7 @@ dependencies:
   - distributed=1.25.1=py27_0
   - docutils=0.14=py27hae222c1_0
   - entrypoints=0.2.3=py27_2
+  - enum34=1.1.6=py27_1
   - et_xmlfile=1.0.1=py27h75840f5_0
   - expat=2.2.6=he6710b0_0
   - fastcache=1.0.2=py27h14c3975_2
@@ -62,8 +64,10 @@ dependencies:
   - fontconfig=2.13.0=h9420a91_0
   - freetype=2.9.1=h8a8886c_1
   - fribidi=1.0.5=h7b6447c_0
+  - funcsigs=1.0.2=py27h83f16ab_0
   - functools32=3.2.3.2=py27_1
   - future=0.17.1=py27_0
+  - futures=3.2.0=py27_0
   - get_terminal_size=1.0.0=haa9412d_0
   - gevent=1.3.7=py27h7b6447c_1
   - glib=2.56.2=hd408876_0
@@ -222,9 +226,11 @@ dependencies:
   - scipy=1.1.0=py27h7c811a0_2
   - seaborn=0.9.0=py27_0
   - send2trash=1.5.0=py27_0
+  - setuptools=40.6.3=py27_0
   - simplegeneric=0.8.1=py27_2
   - singledispatch=3.4.0.3=py27h9bcb476_0
   - sip=4.19.8=py27hf484d3e_0
+  - six=1.12.0=py27_0
   - snappy=1.1.7=hbae5bb6_3
   - snowballstemmer=1.2.1=py27h44e2768_0
   - sortedcollections=1.0.1=py27_0
@@ -257,6 +263,8 @@ dependencies:
   - urllib3=1.24.1=py27_0
   - wcwidth=0.1.7=py27h9e3e1ab_0
   - webencodings=0.5.1=py27_1
+  - werkzeug=0.14.1=py27_0
+  - wheel=0.32.3=py27_0
   - widgetsnbextension=3.4.2=py27_0
   - wrapt=1.10.11=py27h14c3975_2
   - wurlitzer=1.0.2=py27_0
@@ -271,10 +279,9 @@ dependencies:
   - zstd=1.3.7=h0b5b093_0
   - pip:
     - backports-weakref==1.0.post1
+    - bio==0.1.0
+    - biopython==1.75
     - bleach==1.5.0
-    - enum34==1.1.6
-    - funcsigs==1.0.2
-    - futures==3.2.0
     - html5lib==0.9999999
     - keras==1.2.2
     - markdown==3.0.1
@@ -282,12 +289,8 @@ dependencies:
     - numpy==1.12.1
     - pbr==5.1.1
     - protobuf==3.6.1
-    - setuptools==40.6.3
-    - six==1.12.0
     - tensorflow-gpu==1.4.1
     - tensorflow-tensorboard==0.4.0
     - theano==0.9.0
-    - werkzeug==0.14.1
-    - wheel==0.32.3
 prefix: /scratch/user/shaowen1994/.conda/envs/DeepDesign_acc
 

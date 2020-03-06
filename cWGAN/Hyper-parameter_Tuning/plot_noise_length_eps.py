@@ -20,7 +20,7 @@ Nov = []
 PR = []
 
 for i in range(num):
-    index = '0.0001_20_' + hp_list[i] 
+    index = '0.0001_5_' + hp_list[i] 
 
     cr = DL.file_list('../cWGAN_Training_Samples/TrainingSamples_' + index +'/Critic_Cost')
     cr = [-float(j) for j in cr[0:100]]

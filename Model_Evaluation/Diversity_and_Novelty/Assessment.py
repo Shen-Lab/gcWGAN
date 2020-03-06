@@ -163,9 +163,8 @@ def Identity(x,y,matrix = matrix):
     X = x.upper()
     Y = y.upper()
     alignments = pairwise2.align.globaldd(X,Y, matrix,-11,-1,-11,-1)   # Consistent with Blast P grobal alignment
-    max_same = 0
+    max_iden = 0
     for i in alignments:
-        max_iden = 0
         same = 0
         for j in xrange(i[-1]):
             if i[0][j] == i[1][j] and i[0][j] != '-':

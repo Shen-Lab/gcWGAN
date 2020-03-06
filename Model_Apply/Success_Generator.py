@@ -29,8 +29,8 @@ GEN_NUM = int(sys.argv[2])
 SAMPLE_FILE = (sys.argv[3])
 
 if len(sys.argv) == 4:
-    check_path = '../Checkpoints/gcWGAN/model_0.0001_20_128_0.01_semi_diff/'
-    check_point = check_path + "model_100_1495.ckpt"
+    check_path = '../Checkpoints/gcWGAN/Checkpoints_0.0001_5_64_0.02_semi_diff/'
+    check_point = check_path + "model_100_5233.ckpt"
 elif len(sys.argv) == 6:
     check_path = sys.argv[4]
     Epoch = sys.argv[5]
@@ -50,7 +50,7 @@ else:
 noise_len = 128
 CRITIC_ITERS = 20
 
-THRESHOLD = 0.3
+THRESHOLD = 0.21
 
 DATA_DIR = '../Data/Datasets/Final_Data/'
 if len(DATA_DIR) == 0:
@@ -65,7 +65,7 @@ MAX_N_EXAMPLES = 50000 # Max number of data examples to load. If data loading
                           # is too slow or takes too much RAM, you can decrease
                           # this (at the expense of having less training data).
 TOP_NUM = 10
-MIN_LEN = 91
+MIN_LEN = 60
 MAX_LEN = 160
 
 fold_len = 20 #MK add
@@ -264,7 +264,7 @@ with tf.Session() as session:
         for sa in samples:
             sam = ''.join(sa)
             samp = sam.strip('!')
-            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and (not ('!' in samp)):
+            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and ((not ('!' in samp)) and (sam[0] != '!')):
                 test_se.append(sa)     
   
         V_SIZE = len(test_se)    

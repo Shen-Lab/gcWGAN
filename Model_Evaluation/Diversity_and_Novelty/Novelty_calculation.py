@@ -26,7 +26,13 @@ if model == 'cWGAN' or model == 'gcWGAN':
     sample_path = '../Sequence_Generation/Pipeline_Sample/'
     seq_path = sample_path + model + '_Fasta_100_'+ kind +  fold_name
 elif model == 'cVAE':
-    kind = ''
+    if len(sys.argv) >= 4:
+        if sys.argv[3] == 'noX':
+            kind = sys.argv[3] + '_'
+        else:
+            kind = ''
+    else:
+        kind = ''
     sample_path = 'cVAE_Samples/'
     seq_path = sample_path + model + '_100_'+ kind +  fold_name
 else:
@@ -36,6 +42,8 @@ if kind == 'random_':
     KIND = 'Random_'
 elif kind == 'success_':
     KIND = 'Successful_'
+elif kind == 'noX_':
+    KIND = 'noX_'
 else:
     KIND = ''
 
@@ -67,6 +75,7 @@ if fold_name == 'nov':
     s_n = ''
     nov_fil = open('../../Data/Datasets/Final_Data/nov_sequence','r')
     lines = nov_fil.readlines()
+    nov_fil.close()
     for line in lines:
         s_n += line.strip('\n')
     for s_g in seqs:

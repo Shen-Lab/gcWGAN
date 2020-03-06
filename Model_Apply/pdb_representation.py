@@ -7,8 +7,10 @@ import sys
 pdb_file = sys.argv[1]
 coor_file = sys.argv[2]
 
+path = '../Data/Datasets/'
+
 fil_coor = open(coor_file,'w')    
-cor = TM_helper.coordinate_calculation(pdb_file)
+cor = TM_helper.coordinate_calculation(pdb_file,path)
 for c in cor[0]: 
    fil_coor.write(' ' + str(c))
 fil_coor.write('\n')

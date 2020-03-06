@@ -1,3 +1,5 @@
+################################ Import packages #################################
+
 import os, sys
 sys.path.append(os.getcwd())
 
@@ -24,6 +26,8 @@ from keras.models import Model
 from keras.layers import Activation, Dense, Dropout, Flatten, Input, Merge, Convolution1D
 from keras.layers.normalization import BatchNormalization
 
+############################ Set paths and parameters ################################
+
 GEN_NUM = int(sys.argv[1])
 FOLD = sys.argv[2]
 KIND = sys.argv[3]
@@ -33,15 +37,14 @@ MAX_LEN = int(sys.argv[5])
 fold_name = FOLD.split('.')[0] + '_' + FOLD.split('.')[1]
 
 if KIND == 'cWGAN':
-    check_point = '../../Checkpoints/cWGAN/model_0.0001_20_128/model_100_1495.ckpt'
+    check_point = '../../Checkpoints/cWGAN/model_0.0001_5_64/model_100_5233.ckpt'
 elif KIND == 'gcWGAN':
-    check_point = '../../Checkpoints/gcWGAN/Checkpoints_0.0001_20_128_0.01_semi_diff/model_100_1495.ckpt'
+    check_point = '../../Checkpoints/gcWGAN/Checkpoints_0.0001_5_64_0.02_semi_diff/model_100_5233.ckpt'
 else:
     print 'Error! Wrong Kind.'
     quit()
 
-noise_len = 128
-CRITIC_ITERS = 20
+noise_len = 64
 
 DATA_DIR = '../../Data/Datasets/Final_Data/'
 if len(DATA_DIR) == 0:
@@ -55,8 +58,6 @@ LAMBDA = 10 # Gradient penalty lambda hyperparameter.
 MAX_N_EXAMPLES = 50000 # Max number of data examples to load. If data loading
                           # is too slow or takes too much RAM, you can decrease
                           # this (at the expense of having less training data).
-#MIN_LEN = 91
-#MAX_LEN = 160
 
 if not os.path.exists('Pipeline_Sample'):
     os.system('mkdir Pipeline_Sample')
@@ -65,55 +66,17 @@ fold_len = 20 #MK add
 
 lib.print_model_settings(locals().copy())
 
+################################ Load data #################################
+
 seqs, folds, folds_dict, charmap, inv_charmap = data_helpers.load_dataset_protein( #MK change
     max_length=SEQ_LEN,
     max_n_examples=MAX_N_EXAMPLES,
     data_dir=DATA_DIR
 )
 
-###### DeepSF
-
-class K_max_pooling1d(Layer):
-    def __init__(self,  ktop, **kwargs):
-        self.ktop = ktop
-        super(K_max_pooling1d, self).__init__(**kwargs)
-
-    def get_output_shape_for(self, input_shape):
-        return (input_shape[0],self.ktop,input_shape[2])
-
-    def call(self,x,mask=None):
-        output = x[T.arange(x.shape[0]).dimshuffle(0, "x", "x"),
-              T.sort(T.argsort(x, axis=1)[:, -self.ktop:, :], axis=1),
-              T.arange(x.shape[2]).dimshuffle("x", "x", 0)]
-        return output
-
-    def get_config(self):
-        config = {'ktop': self.ktop}
-        base_config = super(K_max_pooling1d, self).get_config()
-        return dict(list(base_config.items()) + list(config.items()))
-
-def create_aa_feature(inp,num):
-
-    num_class = 20
-    output = np.zeros((num,SEQ_LEN,num_class))
-    for i in range(num):
-        output[i,:,:] = np.eye(num_class)[inp[i,]-1]
-
-    return output
-
-model_file="./DeepSF_model_weight_more_folds/model-train-DLS2F.json"
-model_weight="./DeepSF_model_weight_more_folds/model-train-weight-DLS2F.h5"
-deepsf_fold="./DeepSF_model_weight_more_folds/fold_label_relation2.txt"
-kmaxnode=30
-
-json_file_model = open(model_file, 'r')
-loaded_model_json = json_file_model.read()
-json_file_model.close()
-DLS2F_CNN = model_from_json(loaded_model_json, custom_objects={'K_max_pooling1d': K_max_pooling1d})
-DLS2F_CNN.load_weights(model_weight)
-DLS2F_CNN.compile(loss="categorical_crossentropy", metrics=['accuracy'], optimizer="nadam")
-
 print 'Data loading successfully!'
+
+############################ Structure of the Model #################################
 
 def softmax(logits):
     return tf.reshape(
@@ -187,7 +150,7 @@ gen_cost = -tf.reduce_mean(disc_fake)
 
 # WGAN lipschitz-penalty
 alpha = tf.random_uniform(
-    shape=[BATCH_SIZE,1,1], 
+    shape=[BATCH_SIZE,1,1],
     minval=0.,
     maxval=1.
 )
@@ -197,22 +160,9 @@ gradients = tf.gradients(Discriminator(interpolates,real_inputs_label), [interpo
 slopes = tf.sqrt(tf.reduce_sum(tf.square(gradients), reduction_indices=[1,2]))
 gradient_penalty = tf.reduce_mean((slopes-1.)**2)
 
-saver  = tf.train.Saver()
+################################ Generate Sequences #################################
 
-def file_dic(path):
-    fil = open(path,'r')
-    lines = fil.readlines()
-    dic = {}
-    for line in lines:
-        if line != '\n':
-            line = line.strip('\n').split(' ')
-            f = line[0].strip(':')
-            if f in dic.keys():
-                dic[f].append(line[1])
-            else:
-                dic[f] = [line[1]]
-    fil.close()
-    return dic
+saver  = tf.train.Saver()
 
 with tf.Session() as session:
 
@@ -244,7 +194,7 @@ with tf.Session() as session:
         for sa in samples:
             sam = ''.join(sa)
             samp = sam.strip('!')
-            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and (not ('!' in samp)):
+            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and ((not ('!' in samp)) and (sam[0] != '!')):
                 samples_f.append(sa)     
                 num += 1
                 if num >= GEN_NUM:

@@ -304,6 +304,8 @@ with tf.Session() as session:
         yr_fold_file = open(result_path + FOLD,'w')
         yr_sample_file = open(sample_path + 'sample_' + NAME + '_' + FOLD,'w')
         yr_succ_file = open(sample_path + 'success_sample_' + NAME + '_' + FOLD,'w')
+        yr_sample_file.close()
+        yr_succ_file.close()
       
         start = time.time()
         suc_num = 0
@@ -317,7 +319,7 @@ with tf.Session() as session:
             for sa in samples:
                 sam = ''.join(sa)
                 samp = sam.strip('!')
-                if (samp != '') and (not ('!' in samp)):
+                if (samp != '') and (not ('!' in samp)) and (sam[0] != '!'):
                     samples_f.append(samp)
                     test_se.append(sa)
                 
@@ -325,30 +327,35 @@ with tf.Session() as session:
 
             if gen_length > 0:
                 gen_num += gen_length
-
+                  
+                yr_sample_file = open(sample_path + 'sample_' + NAME + '_' + FOLD,'a')
                 for samp in samples_f:
                     yr_sample_file.write(samp + '\n')
+                yr_sample_file.close()
 
                 test_seq = create_aa_feature(np.asarray([[charmap[ch] for ch in l] for l in test_se]).reshape((gen_length,SEQ_LEN)),gen_length)
                 prediction= DLS2F_CNN.predict([test_seq])
                 top10_prediction=prediction.argsort()[:,::-1][:,:10]
-                    
+                
+                yr_succ_file = open(sample_path + 'success_sample_' + NAME + '_' + FOLD,'a')                
+    
                 for p in range(gen_length):
                     f_pre = [fold_index[i] for i in top10_prediction[p]]
                     if FOLD in f_pre:
                         yr_succ_file.write(samples_f[p] + '\n')
                         suc_num += 1
 
+                yr_succ_file.close()
+
             if gen_num >= GEN_NUM:
                 if suc_num >= SUCC_NUM:
                     break
                 elif gen_num >= GEN_UPPER:
                     if suc_num == 0:
+                        yr_succ_file = open(sample_path + 'success_sample_' + NAME + '_' + FOLD,'a')
                         yr_succ_file.write(FOLD + ': No Successful Sequence.\n')
+                        yr_succ_file.close()
                     break
-
-        yr_sample_file.close()
-        yr_succ_file.close()
           
         ratio = float(suc_num)/float(gen_num)
         end = time.time()

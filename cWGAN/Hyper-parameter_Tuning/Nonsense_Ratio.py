@@ -145,35 +145,6 @@ gradients = tf.gradients(Discriminator(interpolates,real_inputs_label), [interpo
 slopes = tf.sqrt(tf.reduce_sum(tf.square(gradients), reduction_indices=[1,2]))
 gradient_penalty = tf.reduce_mean((slopes-1.)**2)
 
-# Dataset iterator
-def inf_train_gen(seqs,folds):
-    epoch = 0
-    while True:
-        indices = np.arange(len(seqs),dtype=np.int) #MK add
-        seqs =  [ seqs[i] for i in indices] #MK add
-        folds =  [ folds[i] for i in indices] #MK add
-        length = len(seqs)-BATCH_SIZE+1
-        for i in xrange(0, length, BATCH_SIZE):
-            if i + BATCH_SIZE >= length:  #SZ add
-                epoch += 1
-            yield np.array(    #MK change
-                [[charmap[c] for c in l] for l in seqs[i:i+BATCH_SIZE]], 
-                dtype='int32'
-            ),np.array(
-                [l for l in folds[i:i+BATCH_SIZE]], 
-                dtype='float32'
-            ),epoch #SZ change
-
-def test_train_gen(seqs,folds):
-    i = 0
-    while True:
-        return np.array(    #MK change
-                [[charmap[c] for c in l] for l in seqs[i:i+BATCH_SIZE]], 
-                dtype='int32'
-            ),np.array(
-                [l for l in folds[i:i+BATCH_SIZE]], 
-                dtype='float32'
-            )
 
 check_dic = {}
 f_list = os.listdir(check_path+'/')
@@ -209,7 +180,6 @@ with tf.Session() as session:
         return decoded_samples
 
     start_time = time.time()
-    l_all = len(seqs)
     PR_train = []
     PR_new = []
     for c in check_index:
@@ -228,9 +198,15 @@ with tf.Session() as session:
             k = 0
             for samp in samples_strip:
                 file_t.write(fo + ": "+''+ samp + '\n')
-                samp = samp.strip("!")
-                if ('!' in samp) or (samp == ''):
+                if samp[0] == '!':
                     k += 1
+                else:
+                    samp = samp.strip("!")
+                    if ('!' in samp) or (samp == ''):
+                        k += 1
+                #samp = samp.strip("!")
+                #if ('!' in samp) or (samp == ''):
+                #    k += 1
             file_t.write('\n')
             PR_t.append(float(k)/float(BATCH_SIZE))
         pr_train = np.mean(PR_t)
@@ -245,9 +221,15 @@ with tf.Session() as session:
             k = 0
             for samp in samples_strip:
                 file_n.write(fo + ": "+''+ samp + '\n')
-                samp = samp.strip("!")
-                if ('!' in samp) or (samp == ''):
+                if samp[0] == '!':
                     k += 1
+                else:
+                    samp = samp.strip("!")
+                    if ('!' in samp) or (samp == ''):
+                        k += 1
+                #samp = samp.strip("!")
+                #if ('!' in samp) or (samp == ''):
+                #    k += 1
             file_n.write('\n')
             PR_n.append(float(k)/float(BATCH_SIZE))
         pr_new = np.mean(PR_n)
@@ -258,31 +240,3 @@ with tf.Session() as session:
         file_t.close()
         file_n.close()
        
-#print PR_train
-#print PR_new
-"""
-plt.figure(1)
-plt.plot(check_index,PR_train) #SZ add
-plt.ylim(0,1)
-plt.title("Nonsense Sequence Ratio")
-plt.xlabel("epoch number")
-plt.ylabel("ratio")
-plt.savefig('Images/'+ test_index + '_nonsense_ratio_train.png')
-plt.figure(2)
-plt.plot(check_index,PR_new) #SZ add
-plt.ylim(0,1)
-plt.title("Nonsense Sequence Ratio")
-plt.xlabel("epoch number")
-plt.ylabel("ratio")
-plt.savefig('Images/'+ test_index + '_nonsense_ratio_new.png')
-plt.figure(3)
-plt.plot(check_index,PR_train,label = 'Training Folds') #SZ add
-plt.plot(check_index,PR_new,label = 'New Folds')
-plt.ylim(0,1)
-plt.title("Nonsense Sequence Ratio")
-plt.xlabel("epoch number")
-plt.ylabel("ratio")
-plt.legend()
-plt.savefig('Images/' + test_index +'_nonsense_ratio.png')
-plt.show()      
-"""   

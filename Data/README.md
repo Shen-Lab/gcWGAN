@@ -1,34 +1,49 @@
 # Data
 
-## Fold Representation
-### Operations:
-* **Run "scripts/data_curation.py" to get representaive pdbs for each fold.**
-* **Run "scripts/represent.py" to obtain *folds_coordinate* and *folds_basis*.**
+## Datasets
+### Origin_SCOPE
+Contain Oringinal protein folds and sequences information we downloaded from SCOPE, including the original 1,232 pdb files.
 
-### Result Files:
+### Origin_uniref
+Contain Oringinal protein sequences information we downloaded from uniref which we applied for the gcWGAN warm start.
 
-Check the folder ***Datasets/Fold_representation/verison04/*** .
+### Intermediate_Data
+Contain the intermediate data such as TM-score matrix and sequence identity matrices that we generated in order to get the final data applied for the model.
 
-* **folds_coordinate:** 20-dimensional coordinates for 1232 folds
-
-* **folds_basis:** The basis vectors of 20-dimensional fold space
-
-***
-
-## Training, Test, Validation Sets:
-
-Check the folder ***Datasets/Final_representation/verison04/*** .
-    
-* **seq_train:** Include all the sequences in the training set. 
-
-* **fold_train:** The corresponding folds for each sequence in 'seq_train' file.
-
-* **fold_val:**  Include all the folds in the validation set.
-
-* **fold_test:** Include all the folds in the test set.
-
-***
-
-## Final Data
-
+### Final Data
 Contain the data we directly applied for the model training, validation and test process.
+
+* **folds_coordinate:** 20-dimensional coordinates for 1232 folds.
+
+* **folds_basis:** The basis vectors of 20-dimensional fold space.
+
+* **pdbs:** Contain the 1,232 pdb files that we deleted the "TER"s inside them to avoid the errors in TM alignment.
+
+***
+
+## Data_Process
+
+Contain the codes to generate the intermediate data and final data during the data process.
+
+***
+
+## Results
+
+(Wait for descriptions)
+
+***
+
+## scripts
+
+(Wait for descriptions)
+
+***
+
+## Data Augmentation:
+
+**Link:** https://drive.google.com/open?id=1icWlx31gcA_61bXuogssn7SfbROaGxea
+
+* **Augment data by deleting the beginning and the end of the sequence based on its secondary structure.**
+* **Augment b into d and n, z into q and e.**
+* **Replace x with a.**
+* **Delete those seqs including X or having more than two x.**

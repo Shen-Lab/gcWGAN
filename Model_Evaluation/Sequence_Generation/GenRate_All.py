@@ -1,3 +1,5 @@
+######################################## Load Packages ############################################
+
 import os, sys
 sys.path.append(os.getcwd())
 
@@ -24,6 +26,8 @@ from keras.models import Model
 from keras.layers import Activation, Dense, Dropout, Flatten, Input, Merge, Convolution1D
 from keras.layers.normalization import BatchNormalization
 
+################################### Set Paths and Parameters #########################################
+
 if not os.path.exists('Pipeline_Sample'):
     os.system('mkdir Pipeline_Sample')
 if not os.path.exists('Pipeline_Sample/Generating_Ratio_Samples'):
@@ -38,16 +42,14 @@ MAX_LEN = int(sys.argv[5])
 #MAX_LEN = 160
 
 if KIND == 'cWGAN':
-    check_point = '../../Checkpoints/cWGAN/model_0.0001_20_128/model_100_1495.ckpt'
+    check_point = '../../Checkpoints/cWGAN/model_0.0001_5_64/model_100_5233.ckpt'
 elif KIND == 'gcWGAN':
-    check_point = '../../Checkpoints/gcWGAN/Checkpoints_0.0001_20_128_0.01_semi_diff/model_100_1495.ckpt'
+    check_point = '../../Checkpoints/gcWGAN/Checkpoints_0.0001_5_64_0.02_semi_diff/model_100_5233.ckpt'
 else:
     print 'Error! Wrong Kind.'
     quit()
 
-#test_index = '0.0001_20_128'
-noise_len = 128
-CRITIC_ITERS = 20
+noise_len = 64
 
 DATA_DIR = '../../Data/Datasets/Final_Data/'
 if len(DATA_DIR) == 0:
@@ -65,6 +67,8 @@ TOP_NUM = 10
 
 fold_len = 20 #MK add
 
+######################################## Load Data ############################################
+
 lib.print_model_settings(locals().copy())
 
 seqs, folds, folds_dict, charmap, inv_charmap = data_helpers.load_dataset_protein( #MK change
@@ -73,7 +77,7 @@ seqs, folds, folds_dict, charmap, inv_charmap = data_helpers.load_dataset_protei
     data_dir=DATA_DIR
 )
 
-###### DeepSF
+######################################## Construct DeepSF ############################################
 
 class K_max_pooling1d(Layer):
     def __init__(self,  ktop, **kwargs):
@@ -118,6 +122,8 @@ DLS2F_CNN.compile(loss="categorical_crossentropy", metrics=['accuracy'], optimiz
 fold_index = DataLoading.Accuracy_index(path = 'DeepSF_model_weight_more_folds/fold_label_relation2.txt')
 
 print 'Data loading successfully!'
+
+################################ Build the Architecture of the Model ################################
 
 def softmax(logits):
     return tf.reshape(
@@ -201,22 +207,9 @@ gradients = tf.gradients(Discriminator(interpolates,real_inputs_label), [interpo
 slopes = tf.sqrt(tf.reduce_sum(tf.square(gradients), reduction_indices=[1,2]))
 gradient_penalty = tf.reduce_mean((slopes-1.)**2)
 
-saver  = tf.train.Saver()
+######################################## Run the Generator ############################################
 
-def file_dic(path):
-    fil = open(path,'r')
-    lines = fil.readlines()
-    dic = {}
-    for line in lines:
-        if line != '\n':
-            line = line.strip('\n').split(' ')
-            f = line[0].strip(':')
-            if f in dic.keys():
-                dic[f].append(line[1])
-            else:
-                dic[f] = [line[1]]
-    fil.close()
-    return dic
+saver  = tf.train.Saver()
 
 with tf.Session() as session:
 
@@ -240,7 +233,6 @@ with tf.Session() as session:
 
     test_se = []
     num = 0
-    novel_array = np.array(folds_dict[FOLD])
 
     s_file = open('Pipeline_Sample/Generating_Ratio_Samples/' + KIND + '_Sample_Fasta_gen_' + FOLD + '_' + str(All_NUM),'w')
     stat_file = open('Pipeline_Sample/Generating_Ratio_Samples/' + KIND + '_Stat_gen_' + FOLD + '_' + str(All_NUM),'w')
@@ -259,13 +251,11 @@ with tf.Session() as session:
         for sa in samples:
             sam = ''.join(sa)
             samp = sam.strip('!')
-            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and (not ('!' in samp)):
+            if ((len(samp) >= MIN_LEN) and (len(samp) <= MAX_LEN)) and ((not ('!' in samp)) and (sam[0] != '!')):
                 test_se.append(sa)     
   
         V_SIZE = len(test_se)   
-        #print V_SIZE  
         if V_SIZE > 0: 
-            #print V_SIZE
 
             test_seq = create_aa_feature(np.asarray([[charmap[c] for c in l] for l in test_se]).reshape((V_SIZE,SEQ_LEN)),V_SIZE)
             prediction= DLS2F_CNN.predict([test_seq])
@@ -274,7 +264,6 @@ with tf.Session() as session:
             for p in range(V_SIZE):
                 f_pre = [fold_index[i] for i in top_prediction[p]]
                 num_all += 1
-                #print num_gen
                 if FOLD in f_pre:
                     temp_time = time.time()
                     record_time = temp_time - g_start
