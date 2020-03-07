@@ -12,9 +12,6 @@
 * **Hyper-parameter_Tuning:** Contain the scripts for tuning the weight of the feedback penalty.
 * **language_helpers:** Contain the functions to help load the training data. Need to be imported for related codes.
 * **DataLoading.py:** Contain the functions to help load and process the data. Need to be imported for related codes.
-* **gcWGAN_training.py:** Main code for gcWGAN Training.
-* **gcWGAN_withoutSemi:** gcWGAN training without semi-supervised learning part.
-* **gcWGAN_loss_calculate:** Code to calculate the generator loss, the critic loss and the overall loss for each epoch of model.
 
 ## Operations:
 * **Load and Set Environment**
@@ -49,7 +46,22 @@ python gcWGAN_training.py <learning rate>  <critic iteration number>  <noise len
 ```
 python gcWGAN_training_withoutSemi.py 
 ```
-* **To calculate the loss:**
+* **To estimate the loss:**
+On training set:
 ```
 python gcWGAN_loss_calculation.py <check points path>  <results path>
+python Loss_plot.py <image path>  <*list of the weights>
 ```
+Notice: \<*list of the weights\> refers to multiple arguments.
+
+On different set (train, vali or test):
+```
+python gcWGAN_loss_calculation_diffset.py <check points path>  <results path> <set name>
+python Loss_plot_diffset.py <image path>  <*list of the weights>  <set name>
+```
+
+Show the improvement from semi-supervision:
+```
+python Semi_improvement_plot.py <image path>  <*list of the weights> 
+```
+
