@@ -25,29 +25,19 @@ python Nov_Random_Generator.py <sequences number>  <model kind>  <minimum length
 ```
 python Nov_Success_Generator.py <sequences number>  <model kind>  <minimum length>  <maximum length>
 ```
-#### Using wrapper (with default length window 60~160):
-***kind*** = ***Random*** or ***Success***
+* **Generate Sequences for a certain fold that pass the Oracle with several certain folds to be the targets:**
 ```
-./wrapper_seq_gen.sh  <model kind>  <fold name>  <kind>  <number>
+python WGAN_target_fold_success_generator.py <sequences number>  <model kind>  <fold name>  <minimum length>  <maximum length>  <*target folds>
 ```
+Nontice: there can be multiple target folds.
 
 ### Generating Rate
-#### Directly using python code:
 * **Generate Sequences and record the successful indexes:**
 ```
 python GenRate_All.py <model kind>  <fold name>  <sequences number>  <minimum length>  <maximum length>
 ```
-* **Generate Sequences with fixed successful number and record the successful indexes:**
-```
-python GenRate_Success.py   <model kind>  <fold name>  <success number>  <minimum length>  <maximum length>
-```
-#### Using wrapper (with default length window 60~160):
-***kind*** = ***All*** or ***Success***
-```
-./wrapper_GenRate.sh  <model kind>  <fold name>  <kind>  <number>
-```
-* **Visualize the successful sequence indexes to show the generating rate:**
 
+* **Visualize the successful sequence indexes to show the generating rate:**
 Before this step, do the **Generate Sequences and record the successful indexes** for the selected folds with *sequence number = 100,000*.
 ```
 python Slope_Generate_stat_plot.py
