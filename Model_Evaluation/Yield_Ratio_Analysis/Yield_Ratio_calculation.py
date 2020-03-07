@@ -42,21 +42,21 @@ EPOCH = sys.argv[2]
 FOLD = sys.argv[3]
 
 if 'gcWGAN' in PATH:
-    result_path = '../../../Results/Accuracy/Yield_Ratio_Result/gcWGAN/' 
+    result_path = '../../Results/Accuracy/Yield_Ratio_Result/gcWGAN/' 
     sample_path = 'Yield_Ratio_Samples/gcWGAN_Samples/'
 elif 'cWGAN' in PATH:
-    result_path = '../../../Results/Accuracy/Yield_Ratio_Result/cWGAN/'
+    result_path = '../../Results/Accuracy/Yield_Ratio_Result/cWGAN/'
     sample_path = 'Yield_Ratio_Samples/cWGAN_Samples/'
 else:
     print 'Path Error!'
     quit()
 
-if not os.path.exists('../../../Results'):
-    os.system('mkdir ../../../Results')
-if not os.path.exists('../../../Results/Accuracy'):
-    os.system('mkdir ../../../Results/Accuracy')
-if not os.path.exists('../../../Results/Accuracy/Yield_Ratio_Result'):
-    os.system('mkdir ../../../Results/Accuracy/Yield_Ratio_Result')
+if not os.path.exists('../../Results'):
+    os.system('mkdir ../../Results')
+if not os.path.exists('../../Results/Accuracy'):
+    os.system('mkdir ../../Results/Accuracy')
+if not os.path.exists('../../Results/Accuracy/Yield_Ratio_Result'):
+    os.system('mkdir ../../Results/Accuracy/Yield_Ratio_Result')
 if not os.path.exists(result_path):
     os.system('mkdir ' + result_path)
 
@@ -121,7 +121,7 @@ else:
 
 #################################### Data Loading #######################################
 
-DATA_DIR = '../../../Data/Datasets/Final_Data/'
+DATA_DIR = '../../Data/Datasets/Final_Data/'
 if len(DATA_DIR) == 0:
     raise Exception('Please specify path to data directory in gan_language.py!')
 

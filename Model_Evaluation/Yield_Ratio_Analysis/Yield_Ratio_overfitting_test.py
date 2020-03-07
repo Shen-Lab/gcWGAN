@@ -38,7 +38,7 @@ else:
     print 'Error! Path of the samples is wrong!'
     quit()
 
-Result_PATH = '../../../Results/Accuracy/Yield_Ratio_Result/' + MODEL + '/' + '/'.join(SAMPLE_PATH.split('/')[2:])
+Result_PATH = '../../Results/Accuracy/Yield_Ratio_Result/' + MODEL + '/' + '/'.join(SAMPLE_PATH.split('/')[2:])
 
 print MODEL
 print model_index
@@ -64,7 +64,7 @@ BATCH_SIZE = 1000
 
 SEQ_LEN = 160
 MAX_N_EXAMPLES = 50000
-DATA_DIR = '../../../Data/Datasets/Final_Data/'
+DATA_DIR = '../../Data/Datasets/Final_Data/'
 
 if SET_KIND == 'train':
     fold_list = DataLoading.file_list(DATA_DIR + 'unique_fold_train')

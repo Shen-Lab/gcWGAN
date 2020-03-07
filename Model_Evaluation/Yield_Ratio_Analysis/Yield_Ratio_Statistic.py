@@ -39,9 +39,9 @@ SEQ_LEN = 160 # Sequence length in characters
 MAX_N_EXAMPLES = 50000
 
 if 'gcWGAN' in PATH:
-    result_path = '../../../Results/Accuracy/Yield_Ratio_Result/gcWGAN/'
+    result_path = '../../Results/Accuracy/Yield_Ratio_Result/gcWGAN/'
 elif 'cWGAN' in PATH:
-    result_path = '../../../Results/Accuracy/Yield_Ratio_Result/cWGAN/'
+    result_path = '../../Results/Accuracy/Yield_Ratio_Result/cWGAN/'
 else:
     print 'Path Error!'
     quit()
@@ -68,7 +68,7 @@ result_path = result_path + 'model_' + NAME + '/'
 
 #################################### Data Loading #######################################
 
-DATA_DIR = '../../../Data/Datasets/Final_Data/'
+DATA_DIR = '../../Data/Datasets/Final_Data/'
 if len(DATA_DIR) == 0:
     raise Exception('Please specify path to data directory in gan_language.py!')
 

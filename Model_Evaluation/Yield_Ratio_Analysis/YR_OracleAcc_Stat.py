@@ -13,7 +13,7 @@ import numpy as np
 sort_file_name = sys.argv[1]
 path = '/'.join(sort_file_name.split('/')[:-1]) + '/'
 fold_list,rank_list,yr_list = DataLoading.columns_to_lists(sort_file_name)
-oracle_data = DataLoading.columns_to_lists('../../../Oracle/DeepSF_modified/deepsf_accuracy.txt')
+oracle_data = DataLoading.columns_to_lists('../../Oracle/DeepSF_modified/deepsf_accuracy.txt')
 fold_ora = oracle_data[0][1:]
 top_10_acc = [float(i) for i in oracle_data[4][1:]]
 
