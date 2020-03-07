@@ -9,8 +9,7 @@
 ## Table of contents:
 * **WarmStart:** Contain the codes for the semi-supervised learning process (training with the unlabeled data from Uniref and the labeled data from SCOPe).
 * **DeepSF_model_weignt:** Contain the weights for DeepSF.
-* **Converge_Check_Result:** Contain the loss on each epoch calculated for different models to show the model convergence.
-* **tflib:** Contain some packages for gcWGAN. Need to be imported for related codes.
+* **Hyper-parameter_Tuning:** Contain the scripts for tuning the weight of the feedback penalty.
 * **language_helpers:** Contain the functions to help load the training data. Need to be imported for related codes.
 * **DataLoading.py:** Contain the functions to help load and process the data. Need to be imported for related codes.
 * **gcWGAN_training.py:** Main code for gcWGAN Training.
