@@ -17,19 +17,19 @@ module load Anaconda/2-5.0.1
 source activate DeepDesign_acc
 module load cuDNN/5.1-CUDA-8.0.44
 ```
-* **Generate Sequences without Oracle based on Our Best Check Points:**
+* **Generate Sequences without oracle based on our best check points:**
 ```
 python Random_Generator.py <coordinate file>  <seqeunces number>  <sequence file> 
 ```
-* **Generate Sequences without Oracle based on Other Check Points:**
+* **Generate Sequences without oracle based on other check points:**
 ```
 python Random_Generator.py <coordinate file>  <seqeunces number>  <sequence file>  <check point path>  <epoch number>
 ```
-* **Generate Sequences that pass the Oracle based on Our Best Check Points:**
+* **Generate Sequences that pass the oracle based on our best check points:**
 ```
 python Success_Generator.py <coordinate file>  <seqeunces number>  <sequence file> 
 ```
-* **Generate Sequences that pass the Oracle based on Our Best Check Points:**
+* **Generate Sequences that pass the oracle based on other check points:**
 ```
 python Success_Generator.py <coordinate file>  <seqeunces number>  <sequence file>  <check point path>  <epoch number>
 ```
