@@ -22,5 +22,5 @@ python cWGAN_Training.py <learning rate>  <critic iteration number>  <noise leng
 ```
 python cWGAN_Continue_Train.py <learning rate>_<critic iteration number>_<noise length>  
 ```
-Notice: only one argument except the scipt name.
+    Notice: only one argument except the scipt name.
 * **Hyper-parameter Tuning:** Go to the ***Hyper-parameter_Tuning*** folder. Follow the instructions and compare the results to select the hyper-parameter.
