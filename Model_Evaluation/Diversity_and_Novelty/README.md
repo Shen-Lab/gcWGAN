@@ -18,6 +18,7 @@ Before the following steps, go to the ***../Sequence_Generation*** folder and ge
 ```
 python Diversity_calculation.py <fold name>  <model>  (<kind>)
 ```
+
 * **Calculate the maximum sequence identities between the generated sequences and natural ones to show the sequence novelty:**
 
 (fold name = *nov*, *a.1*, ...; model = *cWGAN*, *gcWGAN* or *cVAE*; If model = *cWGAN* or *gcWGAN*, kind = *random* or *success*, otherwise kind is not necessary.)
@@ -34,3 +35,11 @@ The sequence diversity and novelty results can be found in the folder ***../../R
 python Diversity_Novelty_plot.py <model>  <fold name>
 ```
 The figures can be found in the folder ***../../Results/Diversity_and_Novelty/Div_Nov_Image/*** .
+
+* **More flexible version:**
+The flexible version just takes the sequence file as the input, so we can do the analysis for more conditions not only the two cases that whether the sequence has been filtered be the oracle.
+```
+python Diversity_calculation_for_files.py <sequence file> 
+python Novelty_calculation_for_files.py <sequence file> 
+python Diversity_Novelty_plot_for_files.py  <model>  <fold name>
+```
