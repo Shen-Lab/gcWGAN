@@ -93,7 +93,7 @@ This part contains the scripts we applied to evaluate the performance of our mod
 ***
 
 ## Citation:
-'''
+```
 @article{karimi2019novo,
   title={De Novo Protein Design for Novel Folds using Guided Conditional Wasserstein Generative Adversarial Networks (gcWGAN)},
   author={Karimi, Mostafa and Zhu, Shaowen and Cao, Yue and Shen, Yang},
@@ -102,7 +102,7 @@ This part contains the scripts we applied to evaluate the performance of our mod
   year={2019},
   publisher={Cold Spring Harbor Laboratory}
 }
-'''
+```
 
 ***
 
