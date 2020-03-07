@@ -43,6 +43,26 @@ In this part you can apply our models to generate protein sequences according to
 
 Some examples of the generated sequences (10 sequences based on gcWGAN that pass the oracle):
 ```
+>1
+MIAPDQTIEKYVKFMAPVFTTTEYLKIVEMEEKGITTIAHGPVIHTARNPYAEVRLVSVTHELLIELQASGFLNISKTICLFETGIDENKEVLIDKDDYKEEPLLVDLFLEMEGPMDGQEIMTKLVRVPVMGQSLKPYAVKKAGVIKSAKHVG
+>2
+PCYALTVEAVENLLQAPAVRTLQKDEGLTPRLQPGIAAYASFIAGGAGCGLTRGSSDNMAKALIQEIEKTLRAVELTPATVQILVNNNEVKLPEKEKPNAIAKGILTVNLISKMDEFTKLVLVGENYTAILIDHIAKHKVGPV
+>3
+MCYDIAQSYLNFMMINGTVLIQTATRTLCPAVHSACRYDYIKVTAAKGNIVTDIGLMYFVRNMELVGPLMTATVAISKSIYTVQKATKETVNEMRTLQVAGTRTMFCRIYHVDMTKMMMQTGISIVGEKKPTRHDAEITYDQLAGHLVPLAHLKKL
+>4
+CTKAQRGVHKIYEVEKNYMPNRTLGDPNSLRIDSIGIRPVNERKDNTRYVAKKAKAILAKKDIMYCLPINIDVVKVTSTLDNYLDGDPYSKRPRFDDNLIKAVIPTDVALKPSPRYDVQAGRETPPAYTAVVQRFFSVKLNRL
+>5
+CPNVYQKLLYSMTEGPMDIGPVEVGQLLAVIPSAIGKVVSEITTSVHPAAPFEEAARVTAMAQRAALQYSTQTYLVGKESIALMYGKYRALHQDLARMVLADGQTADVQEVVPIIADIQRMHPAGQVAPRLIESGVVTASVLMTAA
+>6
+LLHGKLEVFHKCVAKADEASGLTFFHCGCSAYVTSEAAKGRYRPRACSTVHYFEKGATIPGLQYTNMYENAMVCTSKIRIYLEAMNMAPNVPLHRAAKYDNVSAALTANNNKVALIAEYYVTALLEGEVTQHLEEYKKNPPPELYEEIC
+>7
+MNKINIKYCPFNFNKVFRKEAFITQMAGENMAVLKELSEQIDHCSCFHKNTARQLLHRAEDGPVTEVETLLELRAAMICCFRRRAPRLVLGSSMSTTVITKCIAICTGQPYPGNGPPTTLGQPACSGVEVINNQAAIVIQTVEQRFILMTPGK
+>8
+CTVTAVQEFTENYGGLPLYVTRNQTLAPADKRLTPRYAGNFPEGAEVPAPNLAQTSPGVTYGKNIGRYLKNGLPDVAICTSPNLNLSGAYPDIVKYNYQQPEVFIRQYHPGNEMDVVKALEQFSSELLPGKTMSIVVNSYNNLADK
+>9
+CETTIDIEASVISQVIAVIVALTPIHKYAHASSKALASGASDVNVGPKLVAYIGKIAYSDPPIDLIPPVKVVVALLAPELAGVTAADYISYNEGKPATGESAGNAAFADGTTTIAPQRTIYEGEHKARINIITIADGAPLGSHEIP
+>10
+PEPDLVLTCTNLSFSAMVSCLRETSAFAGVEYAYNGIHPAGSCCLAAMKKGFFPHTEGMNALVIEPTPPVPCAPTKDLVQNKIQKAKLLPPAATTADEYSETLGQEDFLKLLTNPKITEKKKSPTTLILVTVNSELMISPVYFTGPLMKELLYHCNGEN
 ```
 ***
 
@@ -52,6 +72,13 @@ In the ***cWGAN*** folder and ***gcWGAN*** folder there are scripts for traning 
 
 Some examples of the generated sequences during the training process:
 ```
+fold a.39: vvaitfdnvhfpcshapltkaltvkklqvsannvsllvfddakmtkkidiekaikgfymmknnpqaqleiierftpttrgkpvikpiasftltspeilgkegykk!!!!!!!!!!!!!!!!!!!itkmlidavks!!!!!!!!!!!!!!!!!!!!!!!!!
+fold d.78: leemskvgntpaltyreardvavigifnngkqmksrddvtdeaddyqceidpisnllelgallpplhvaetkmllyykneakmhlfegag!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+fold d.240: tlaedippklpleveqcneiivdaqnkryvavgealllitcpmlqnnsmsttcgyrfeakskdgvicespeeglqndtthyachkraaavqiptekkttvyrlhacttklegcaeadnrvladvgldgivqravcdivttfsaevnp!!!!!!!!!!!!!
+fold d.227: sckpglplvcagkkstyleklltgylvyslladyispkaleeavisekkpniampafatmpslvaddvtaliakkglqnaakcpndhmeiyeaeedpaiigqgynkhqgvgcnivvmagaipdeqkvenlrsliei!!!!!!!!!!!!!!!!!!!!!!!!
+fold d.301: mtakstvqlpaeykgqniaeilnnvafnlaaivysattivayramacfpcgeknykeilgkvltlfidkhpiqnnr!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+fold d.223: mqtyeeavtlgltneqqtgknvtpiniaeekllvtnglvcqapalpvneevliklsentdnikpllciigkkseaispcsfraeeafdrsadymankatimcrkgnyaiilhsdgeellaihqtsgviirlghvpgkknrymppgaliplcngp!!!!!!
+fold a.216: eelakrmiqrapdveligknkiatelkrlcllirgqtaanimnvillcataisvipkkskpasqyeetvnpadlakeiilqekkeaftriltteylvtsllkmypvhkvpkp!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ```
 ***
 
