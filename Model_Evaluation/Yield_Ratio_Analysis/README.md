@@ -26,36 +26,9 @@ Open the file ***~/.keras/keras.json***, and set "backend" to be "theano", which
 python Yield_Ratio_calculation.py <check point path>  <epoch index>  <fold> 
 ```
 The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/*** with a name of the fold name. "model name" is "cWGAN" or "gcWGAN". "model index" is related to the name where you put the check points and the epoch index.
-* **Calculate Yield Ratio for All the Folds on [Terra](https://hprc.tamu.edu/wiki/Terra):** Change the related information (account number, e-mail, job name, running hours, output file, etc.) in the ***create_job_yield_ratio.sh*** file. Then run 
-```
-./wrapper_yield_ratio_calculation.sh
-```
+
 * **Get the Statistics of the Yiled Ratios:** To run this step, you must have calculated the yield ratios for all the folds in the training, the validation and the test set. 
 ```
 python Yield_Ratio_Statistic.py <check point path>  <epoch index>
 ```
 The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/\<set name\>/*** , while "set name" = "train", "vali" or "test".
-
-***
-
-## For cVAE:
-
-For comparison we also applied the previous state-of-art model, [cVAE](https://github.com/psipred/protein-vae) to calculate the yield ratios. To do this, firstly go to the ***Yield_Ratio_Samples/cVAE_Samples*** folder and download the sequences inside it with the link below. Then run the following codes.
-
-Link: https://drive.google.com/drive/folders/1hlaJ3Q5KRcz8ZQ6qyG6GsU8sH7xL6iip
-
-* **Yield Ratio of a Certain Fold base on cVAE:** 
-```
-python Yield_Ratio_calculation_cVAE.py <fold> 
-```
-The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/cVAE/*** with a name of the fold name. To run the following steps, you must have calculated the yield ratios for all the folds in the training, the validation and the test set based on cVAE.
-* **Arrange the Results inside a Dictionary File:**
-```
-python cVAE_dictionary.py 
-```
-The dictionary file can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/cVAE/YR_statistic/*** .
-* **Get the Statistics of the Yiled Ratios for cVAE:**  
-```
-python Yield_Ratio_Statistic_cVAE.py 
-```
-The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/cVAE/YR_statistic/\<set name\>/*** , while "set name" = "train", "vali" or "test".
