@@ -37,7 +37,7 @@ python Diversity_Novelty_plot.py <model>  <fold name>
 The figures can be found in the folder ***../../Results/Diversity_and_Novelty/Div_Nov_Image/*** .
 
 * **More flexible version:**
-The flexible version just takes the sequence file as the input, so we can do the analysis for more conditions not only the two cases that whether the sequence has been filtered be the oracle.
+The flexible version just takes the sequence file as the input, so we can do the analysis for more conditions rather than only the two cases that whether the sequence has been filtered be the oracle.
 ```
 python Diversity_calculation_for_files.py <sequence file> 
 python Novelty_calculation_for_files.py <sequence file> 
