@@ -2,7 +2,7 @@
 
 This part contains the materials of the oracles. ***DeepSF_modified*** is for our modified oracle, and ***DeepSF_origin*** is for the original DeepSF. ***DeepSF_origin*** contains the scripts we developed to get the the sequence features (PSSM, secondary structure and solvent assessbility) and predict the target fold os a sequence based on the original DeepSF. To run such scripts and the scripts in current directory which are for sequence generation, please download and compile the related packages:
 * **[DeepSF](https://github.com/multicom-toolbox/DeepSF)** to ***DeepSF_origin***;
-* **[blast-2.2.26](ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/)**, **[nr90](http://sysbio.rnet.missouri.edu/bdm_download/nr_database/nr90.tar.gz)** and **[nr70](http://sysbio.rnet.missouri.edu/bdm_download/nr_database/nr70.tar.gz)** to ***DeepSF_origin/PSSM***;
+* **[blast-2.2.26](http://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.2.26/)**, **[nr90](http://sysbio.rnet.missouri.edu/bdm_download/nr_database/nr90.tar.gz)** and **[nr70](http://sysbio.rnet.missouri.edu/bdm_download/nr_database/nr70.tar.gz)** to ***DeepSF_origin/PSSM***;
 * **[SCRATCH-1D_1.2](http://scratch.proteomics.ics.uci.edu/explanation.html)** to ***DeepSF_origin/SS_SA***.
 
 ## Operations:
