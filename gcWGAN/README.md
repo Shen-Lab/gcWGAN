@@ -56,8 +56,8 @@ Notice: \<*list of the weights\> refers to multiple arguments.
 
 On different set (train, vali or test):
 ```
-python gcWGAN_loss_calculation_diffset.py <check points path>  <results path> <set name>
-python Loss_plot_diffset.py <image path>  <*list of the weights>  <set name>
+python gcWGAN_loss_calculation_diffset.py <check points path>  <results path> <set kind>
+python Loss_plot_diffset.py <image path>  <*list of the weights>  <set kind>
 ```
 
 Show the improvement from semi-supervision:
