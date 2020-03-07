@@ -25,10 +25,10 @@ Open the file ***~/.keras/keras.json***, and set "backend" to be "theano", which
 ```
 python Yield_Ratio_calculation.py <check point path>  <epoch index>  <fold> 
 ```
-The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/*** with a name of the fold name. "model name" is "cWGAN" or "gcWGAN". "model index" is related to the name where you put the check points and the epoch index.
+The results can be found in the folder ***../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/*** with a name of the fold name. "model name" is "cWGAN" or "gcWGAN". "model index" is related to the name where you put the check points and the epoch index.
 
 * **Get the Statistics of the Yiled Ratios:** To run this step, you must have calculated the yield ratios for all the folds in the training, the validation and the test set. 
 ```
 python Yield_Ratio_Statistic.py <check point path>  <epoch index>
 ```
-The results can be found in the folder ***../../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/\<set name\>/*** , while "set name" = "train", "vali" or "test".
+The results can be found in the folder ***../../Results/Accuracy/Yield_Ratio_Result/\<model name\>/model_\<model index\>/\<set name\>/*** , while "set name" = "train", "vali" or "test".
