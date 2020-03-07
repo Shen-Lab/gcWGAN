@@ -88,7 +88,7 @@ fold a.180: mpeecvctglepgevrrqngvipllnqgfhavltpagktylccttatknqvivhmfcqtaaeniyaei
 
 ## Evaluate Model Performance:
 
-This part contains the scripts we applied to evaluate the performance of our model. We also generate several sequences with the previouse state-of-art model [cVAE](https://github.com/psipred/protein-vae) and applied our evaluation method for comparison. Model evalustion consists of three part, model accuracy, sequence generating rate and sequence diversity and novelty, and for model accuracy we both applied yield ratio calculation for all the training, validation and test folds, and [Rosetta](https://www.rosettacommons.org/docs/latest/application_documentation/structure_prediction/abinitio-relax) analysis for 6 selected test folds and a novel fold. Go to the ***Model_Evaluation*** folder for more details.
+This part contains the scripts we applied to evaluate the performance of our model. We also generate several sequences with the previouse state-of-art model [cVAE](https://github.com/psipred/protein-vae) and applied our evaluation method for comparison. Model evalustion consists of three part, model accuracy, sequence generating rate and sequence diversity and novelty, and for model accuracy we applied yield ratio calculation for all the training, validation and test folds. Go to the ***Model_Evaluation*** folder for more details.
 
 ***
 
