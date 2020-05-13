@@ -8,4 +8,4 @@ To train the model, directly go to the folder ***cWGAN*** or ***gcWGAN*** and fo
 ## Load the Trained Model
 To apply our trained model, please download out check points inside this directory throw the attached link.Please keep the relative path the same as that in the Google drive to avoid path error.
 
-Link: https://drive.google.com/open?id=1UzzA89bcEV0wiWNnWR9Oqe93KDV7P8oz
+Link: https://drive.google.com/drive/folders/1UzzA89bcEV0wiWNnWR9Oqe93KDV7P8oz?usp=sharing
