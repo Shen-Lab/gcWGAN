@@ -40,7 +40,7 @@ Our check points were gotten after 100 epoch of training. If you have already do
 
 ## Model Application
 
-In this part you can apply our models to generate protein sequences according to a given protein fold (\*.pbd file). With the scripts you can represent the givern fold with a 20 dimensional vector and send it to the generator for sequence generation. Go to the ***Model_Apply*** folder for more dtails.
+In this part you can apply our models to generate protein sequences according to a given protein fold (\*.pdb file). With the scripts you can represent the givern fold with a 20 dimensional vector and send it to the generator for sequence generation. Go to the ***Model_Apply*** folder for more dtails.
 
 Some examples of the generated sequences (10 sequences based on gcWGAN that pass the oracle):
 ```
