@@ -94,13 +94,18 @@ This part contains the scripts we applied to evaluate the performance of our mod
 
 ## Citation:
 ```
-@article{karimi2019novo,
-  title={De Novo Protein Design for Novel Folds using Guided Conditional Wasserstein Generative Adversarial Networks (gcWGAN)},
-  author={Karimi, Mostafa and Zhu, Shaowen and Cao, Yue and Shen, Yang},
-  journal={bioRxiv},
-  pages={769919},
-  year={2019},
-  publisher={Cold Spring Harbor Laboratory}
+@article{gcWGAN,
+author = {Karimi, Mostafa and Zhu, Shaowen and Cao, Yue and Shen, Yang},
+title = {De Novo Protein Design for Novel Folds Using Guided Conditional Wasserstein Generative Adversarial Networks},
+journal = {Journal of Chemical Information and Modeling},
+volume = {60},
+number = {12},
+pages = {5667-5681},
+year = {2020},
+doi = {10.1021/acs.jcim.0c00593},
+note ={PMID: 32945673},
+URL = {https://doi.org/10.1021/acs.jcim.0c00593},
+eprint = {https://doi.org/10.1021/acs.jcim.0c00593}
 }
 ```
 
