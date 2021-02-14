@@ -18,6 +18,11 @@ conda env create -f tensorflow_training.yml
 ```
 conda env create -f DeepDesign_acc.yml
 ```
+For the oracle (modified DeepSF), add the following function in the file **\<path where keras was installed>/keras/activations.py**.
+```
+def leakyrelu(x, alpha=0.1, max_value=None):
+    return K.relu(x, alpha=alpha, max_value=max_value)
+```
 ### * Check Points:
 * **To train the model (For *cWGAN* and *gcWGAN*):** Directly go to the ***cWGAN*** or ***gcWGAN*** model and follow the instructions. 
 * **Apply our model for evaluation or sequence generation (For *Model_Test* and *Model_Evaluation*):** Go to the ***Checkpoints*** folder and download the related check points into the correct path according to the instruction. 
