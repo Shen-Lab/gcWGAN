@@ -28,19 +28,21 @@ In this project we utilized two backends of keras, the **theano** and **tensorfl
 * When training gcWGAN, set the backend to be **tensorflow** as follows:
 ```
 {
-    "floatx": "float32",
     "epsilon": 1e-07,
-    "backend": "tensorflow",
-    "image_data_format": "channels_last"
+    "floatx": "float32",
+    "image_dim_ordering":"tf",
+    "image_data_format": "channels_last",
+    "backend": "tensorflow"
 }
 ```
 * Otherwise (training cWGAN, pretraining and generating sequences), set the backend to be **theano** as follows:
 ```
 {
-    "floatx": "float32",
     "epsilon": 1e-07,
-    "backend": "theano",
-    "image_data_format": "channels_last"
+    "floatx": "float32",
+    "image_dim_ordering":"tf",
+    "image_data_format": "channels_last",
+    "backend": "theano"
 }
 ```
 ### * Check Points:
