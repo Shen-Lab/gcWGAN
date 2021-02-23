@@ -23,6 +23,26 @@ For the oracle (modified DeepSF), add the following function in the file **\<pat
 def leakyrelu(x, alpha=0.1, max_value=None):
     return K.relu(x, alpha=alpha, max_value=max_value)
 ```
+### * Backend of Keras:
+In this project we utilized two backends of keras, the **theano** and **tensorflow**, which can be set in the file **/.keras/keras.json**.
+* When training gcWGAN, set the backend to be **tensorflow** as follows:
+```
+{
+    "floatx": "float32",
+    "epsilon": 1e-07,
+    "backend": "tensorflow",
+    "image_data_format": "channels_last"
+}
+```
+* Otherwise (training cWGAN, pretraining and generating sequences), set the backend to be **theano** as follows:
+```
+{
+    "floatx": "float32",
+    "epsilon": 1e-07,
+    "backend": "theano",
+    "image_data_format": "channels_last"
+}
+```
 ### * Check Points:
 * **To train the model (For *cWGAN* and *gcWGAN*):** Directly go to the ***cWGAN*** or ***gcWGAN*** model and follow the instructions. 
 * **Apply our model for evaluation or sequence generation (For *Model_Test* and *Model_Evaluation*):** Go to the ***Checkpoints*** folder and download the related check points into the correct path according to the instruction. 
